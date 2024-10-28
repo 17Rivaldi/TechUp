@@ -23,7 +23,6 @@
                                     <th>Judul</th>
                                     <th>Slug</th>
                                     <th>Kategori</th>
-                                    {{-- <th>Gambar</th> --}}
                                     <th>Publish</th>
                                     <th>Action</th>
                                 </tr>
@@ -35,11 +34,6 @@
                                         <td>{{ $article->title }}</td>
                                         <td>{{ $article->slug }}</td>
                                         <td>{{ $article->Category->name }}</td>
-                                        {{-- <td>
-                                            <img src="{{ asset('storage/image-article/' . $article->image) }}"
-                                                alt="Gambar Article" width="100">
-                                        </td> --}}
-                                        {{-- <td>{{ $article->publish ? 'Published' : 'Not Published' }}</td> --}}
                                         <td>
                                             @if (is_null($article->publish))
                                                 <span>Belum Dipublikasikan</span>
@@ -56,16 +50,16 @@
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#articleDetail{{ $article->id }}"><i
                                                         class="fas fa-eye me-1"></i>Detail</button>
-                                                {{-- <a href="{{ route('article_destroy', ['id' => $article->id]) }}"
-                                                    class="btn btn-danger btn-sm text-xs" role="button"
-                                                    onclick="return confirm('Apakah kamu yakin ingin menghapus Event ini ?')"><i
-                                                        class="fas fa-trash me-1"></i>Hapus</a> --}}
-                                                <form action="{{ route('article_destroy', $article->id) }}" method="POST"
-                                                    onsubmit="return confirm('Apakah kamu yakin ingin menghapus artikel ini?');">
+                                                <!-- FORM DELETE -->
+                                                <form id="deleteForm_{{ $article->id }}"
+                                                    action="{{ route('article_destroy', ['id' => $article->id]) }}"
+                                                    method="POST">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn-sm text-xs"><i
-                                                            class="fas fa-trash me-1"></i>Hapus</button>
+                                                    <button type="button" class="btn btn-danger btn-sm text-xs"
+                                                        onclick="deleteConfirmation('deleteForm_{{ $article->id }}')">
+                                                        <i class="fas fa-trash me-1"></i>Hapus
+                                                    </button>
                                                 </form>
                                             </div>
                                         </td>
@@ -143,19 +137,4 @@
             width: 500px;
         }
     </style>
-@endsection
-
-@section('addJs')
-    <script>
-        $(document).ready(function() {
-            $('#data-table').DataTable({
-                "language": {
-                    "paginate": {
-                        "previous": '<i class="fas fa-chevron-left"></i>',
-                        "next": '<i class="fas fa-chevron-right"></i>'
-                    }
-                }
-            });
-        });
-    </script>
 @endsection

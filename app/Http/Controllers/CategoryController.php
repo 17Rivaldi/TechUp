@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class CategoryController extends Controller
 {
@@ -37,6 +38,7 @@ class CategoryController extends Controller
             'name' => $request->input('name'),
         ]);
 
+        Alert::success('success', 'Category Berhasil ditambah');
         return redirect()->route('category_index');
     }
 
@@ -70,14 +72,24 @@ class CategoryController extends Controller
         $category->name = $request->input('name');
         $category->save();
 
+        Alert::success('success', 'Category Berhasil diubah');
         return redirect()->route('category_index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category)
+    public function destroy(string $id)
     {
-        // $categories = Category::findOrFaIl($id);
+        $category = Category::findOrFaIl($id);
+
+        if (!$category) {
+            Alert::error('error', 'Category tidak ditemukan.');
+            return redirect()->route('category_index');
+        }
+        $category->delete();
+
+        Alert::success('success', 'Category Berhasil di Hapus');
+        return redirect()->route('category_index');
     }
 }

@@ -31,16 +31,16 @@
                                             href="{{ route('category_edit', $category->id) }}" role="button"><i
                                                 class="fa fa-edit me-1"></i>Edit</a>
                                         <!-- Formulir untuk DELETE -->
-                                        {{-- <form id="deleteForm_{{ $category->id }}"
-                                            action="{{ route('category_delete', ['id' => $category->id]) }}" method="POST"
-                                            class="d-inline">
-                                            @method('DELETE')
+                                        <form id="deleteForm_{{ $category->id }}"
+                                            action="{{ route('category_destroy', ['id' => $category->id]) }}"
+                                            method="POST">
                                             @csrf
-                                            <button type="button" class="btn btn-danger btn-sm text-xs my-1"
+                                            @method('DELETE')
+                                            <button type="button" class="btn btn-danger btn-sm text-xs"
                                                 onclick="deleteConfirmation('deleteForm_{{ $category->id }}')">
                                                 <i class="fas fa-trash me-1"></i>Hapus
                                             </button>
-                                        </form> --}}
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach

@@ -7,6 +7,7 @@ use App\Models\Category;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class ArticleController extends Controller
 {
@@ -58,6 +59,7 @@ class ArticleController extends Controller
             ]
         );
 
+        Alert::success('success', 'Article Berhasil ditambah');
         return redirect()->route('article_index');
     }
 
@@ -115,6 +117,7 @@ class ArticleController extends Controller
             'publish' => $request->input('publish'),
         ]);
 
+        Alert::success('success', 'Article Berhasil diubah');
         return redirect()->route('article_index');
     }
 
@@ -123,18 +126,22 @@ class ArticleController extends Controller
      */
     public function destroy(string $id)
     {
-        $article = Article::find($id);
+        $article = Article::findOrFail($id);
 
         if (!$article) {
-            return redirect()->route('article_index')->with('error', 'Artikel tidak ditemukan.');
+            Alert::error('error', 'Category tidak ditemukan.');
+            return redirect()->route('article_index');
         }
 
-        if (!$article->image) {
+        if ($article->image) {
             Storage::disk('public')->delete('image-article/' . $article->image);
         }
 
+        // dd($article);
+
         $article->delete();
 
-        return redirect()->route('article_index')->with('success', 'Artikel berhasil dihapus.');
+        Alert::success('success', 'Artikel Berhasil di Hapus');
+        return redirect()->route('article_index');
     }
 }

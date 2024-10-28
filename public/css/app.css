@@ -1,0 +1,30 @@
+/* ---------- Dashboard ---------- */
+/* Disable Scrollbar on Sidebar */
+.navbar-vertical.navbar-expand-xs .navbar-collapse {
+    display: block;
+    overflow: auto;
+    height: calc(100vh - 150px);
+}
+/* 
+.nav-link:hover {
+    background-color: #f0f0f0;
+    color: #000;
+} */
+
+/* Style for dataTables */
+.pagination .page-item.active .page-link {
+    color: white;
+}
+
+.dataTables_length select {
+    background: none;
+    cursor: pointer;
+}
+
+.dataTables_length select:hover {
+    border: 1px solid blue;
+}
+
+.breadcrumb-item a:hover {
+    color: #e3e3e3 !important;
+}

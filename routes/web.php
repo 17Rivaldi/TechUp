@@ -31,6 +31,7 @@ Route::get('/category/create', [CategoryController::class, 'create'])->name('cat
 Route::post('/category/save', [CategoryController::class, 'store'])->name('category_store');
 Route::get('/category/{id}/edit', [CategoryController::class, 'edit'])->name('category_edit');
 Route::put('/category/{id}', [CategoryController::class, 'update'])->name('category_update');
+Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->name('category_destroy');
 
 // Article
 Route::get('/article', [ArticleController::class, 'index'])->name('article_index');
@@ -48,5 +49,5 @@ Route::get('/role/{id}/edit', [RoleController::class, 'edit'])->name('role_edit'
 Route::put('/role/{id}', [RoleController::class, 'update'])->name('role_update');
 
 // Website
-Route::get('/ ', [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/detail ', [HomeController::class, 'detail'])->name('detail');

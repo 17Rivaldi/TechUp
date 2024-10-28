@@ -13,24 +13,11 @@
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
 
     <link id="pagestyle" href="{{ asset('css/argon-dashboard.css?v=2.0.4') }}" rel="stylesheet" />
-    {{-- <link id="pagestyle" href="{{ asset('css/app.css') }}" rel="stylesheet" /> --}}
 
     <link rel="stylesheet" type="text/css" href="{{ asset('css/dataTables.bootstrap5.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
     @yield('addCss')
-
-    <style>
-        /* .nav-link:hover {
-            background-color: #f0f0f0;
-            color: #000;
-        } */
-
-        .navbar-vertical.navbar-expand-xs .navbar-collapse {
-            display: block;
-            overflow: auto;
-            height: calc(100vh - 150px);
-        }
-    </style>
 </head>
 
 <body class="g-sidenav-show bg-gray-100">
@@ -41,18 +28,12 @@
         @include('dashboard.layouts.navbar')
 
         <div class="container-fluid py-4">
-            @if (session('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
             @yield('content')
         </div>
 
     </main>
 
-    {{-- @include('sweetalert::alert') --}}
+    @include('sweetalert::alert')
 
     <!--   Core JS Files   -->
     <script src="{{ asset('js/core/popper.min.js') }}"></script>
@@ -66,12 +47,15 @@
     <!-- jQuery -->
     <script src="{{ asset('js/jquery-3.7.0.js') }}"></script>
 
+    <!-- DataTables -->
     <script type="text/javascript" src="{{ asset('js/dataTables-1.13.7.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/dataTables.bootstrap5.min.js') }}"></script>
 
-    {{-- <script src="{{ asset('js/sweetalert2@11.js') }}"></script> --}}
+    <!-- SeetAlert -->
+    <script src="{{ asset('js/sweetalert2@11.js') }}"></script>
 
-    {{-- <script src="{{ asset('js/alert.js') }}"></script> --}}
+    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/alert.js') }}"></script>
 
     @yield('addJs')
 </body>
