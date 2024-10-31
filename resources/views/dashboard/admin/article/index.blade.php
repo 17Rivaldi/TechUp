@@ -43,13 +43,13 @@
                                         </td>
                                         <td class="align-middle">
                                             <div class="d-flex flex-column flex-md-row text-center">
-                                                <a class="btn btn-primary btn-sm text-xs"
+                                                <button type="button" class="btn btn-warning btn-sm text-xs"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#articleDetail{{ $article->id }}">
+                                                    <i class="fas fa-eye me-1"></i>Detail</button>
+                                                <a class="btn btn-primary btn-sm text-xs mx-1"
                                                     href="{{ route('article_edit', $article->id) }}" role="button"><i
                                                         class="fas fa-edit me-1"></i>Edit</a>
-                                                <button type="button" class="btn btn-warning btn-sm text-xs mx-1"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#articleDetail{{ $article->id }}"><i
-                                                        class="fas fa-eye me-1"></i>Detail</button>
                                                 <!-- FORM DELETE -->
                                                 <form id="deleteForm_{{ $article->id }}"
                                                     action="{{ route('article_destroy', ['id' => $article->id]) }}"

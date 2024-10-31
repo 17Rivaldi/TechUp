@@ -36,8 +36,6 @@
 
                         <div class="mb-3">
                             <label for="description" class="form-label">Deskripsi</label>
-                            {{-- <input type="text" class="form-control" id="description" name="description"
-                                value="{{ $article->description }}" required> --}}
                             <textarea class="form-control" id="description" name="description" rows="5">{{ $article->description }}</textarea>
                             @error('description')
                                 <small>{{ $message }}</small>
@@ -61,27 +59,16 @@
                             @enderror
                         </div>
 
-                        {{-- <div class="mb-3">
-                            <label for="image" class="form-label">Image</label>
-                            <input type="text" class="form-control" id="image" name="image"
-                                value="{{ $article->image }}" required>
-                            @error('image')
-                                <small>{{ $message }}</small>
-                            @enderror
-                        </div> --}}
-
                         <div class="mb-3">
                             <label for="image" class="form-label">Image</label>
                             @if ($article->image)
-                                <!-- Menampilkan gambar saat ini jika ada -->
                                 <img class="mb-2" src="{{ asset('storage/image-article/' . $article->image) }}"
-                                    alt="Current Event Image">
+                                    alt="Current Event Image" width="100%" height="auto" style="max-width: 200px">
                             @else
-                                <!-- Menampilkan placeholder atau pesan jika tidak ada gambar -->
                                 No Image
                             @endif
                             <input type="file" class="form-control" id="image" name="image"
-                                value="{{ $article->image }}" required>
+                                value="{{ $article->image }}">
                             @error('image')
                                 <small>{{ $message }}</small>
                             @enderror
@@ -96,7 +83,7 @@
                             @enderror
                         </div> --}}
 
-                        <button type="submit" class="btn btn-primary">Tambah Article</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
                         <a href="{{ route('article_index') }}" class="btn btn-danger" role="button">Batal</a>
                     </form>
                 </div>

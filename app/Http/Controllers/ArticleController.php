@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use App\Models\Category;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Intervention\Image\ImageManager;
+use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Validator;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class ArticleController extends Controller
 {
@@ -45,8 +47,17 @@ class ArticleController extends Controller
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $image_name = date('ymdHis') . $image->getClientOriginalName();
+            $image_name = date('ymdHis') . '_' . $image->getClientOriginalName();
             $image->storeAs('image-article', $image_name, 'public');
+
+            $imgManager = new ImageManager(new Driver());
+            $thumbImage = $imgManager->read(storage_path('app/public/image-article/' . $image_name));
+            $thumbImage->resize(1280, 720);
+            $thumbImage->text('TechUp', 20, 20, function ($font) {
+                $font->size(500);
+                $font->color('#d0d0d0');
+            });
+            $thumbImage->save(storage_path('app/public/image-article/' . $image_name));
         }
 
         Article::create(
@@ -90,7 +101,7 @@ class ArticleController extends Controller
             'title' => 'required',
             'description' => 'required',
             'category_id' => 'required',
-            'image' => 'required|mimes:png,jpg,jpeg|max:2048',
+            'image' => 'nullable|mimes:png,jpg,jpeg|max:2048',
         ]);
 
         if ($validator->fails()) return redirect()->back()->withInput()->withErrors($validator);
@@ -105,16 +116,23 @@ class ArticleController extends Controller
             $image = $request->file('image');
             $image_name = date('ymdHis') . '_' . $image->getClientOriginalName();
             $image->storeAs('image-article', $image_name, 'public');
-        } else {
-            $image_name = $article->image;
+
+            $imgManager = new ImageManager(new Driver());
+            $thumbImage = $imgManager->read(storage_path('app/public/image-article/' . $image_name));
+            $thumbImage->resize(1280, 720);
+            $thumbImage->text('TechUp', 20, 20, function ($font) {
+                $font->size(500);
+                $font->color('#d0d0d0');
+            });
+            $thumbImage->save(storage_path('app/public/image-article/' . $image_name));
         }
 
         $article->update([
             'title' => $request->input('title'),
             'description' => $request->input('description'),
             'category_id' => $request->input('category_id'),
-            'image' => $image_name,
-            'publish' => $request->input('publish'),
+            'image' => isset($image_name) ? $image_name : $article->image,
+            // 'publish' => $request->input('publish'),
         ]);
 
         Alert::success('success', 'Article Berhasil diubah');
