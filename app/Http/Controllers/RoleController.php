@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
@@ -40,6 +41,7 @@ class RoleController extends Controller
         );
         // $role->syncPermissions($request->permissions);
 
+        Alert::success('success', 'Role Berhasil Dibuat');
         return redirect()->route('role_index');
     }
 
@@ -73,6 +75,15 @@ class RoleController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $role = Role::findOrFaIl($id);
+
+        if (!$role) {
+            Alert::error('error', 'Category tidak ditemukan.');
+            return redirect()->route('category_index');
+        }
+        $role->delete();
+
+        Alert::success('success', 'Data Berhasil di Hapus');
+        return redirect()->route('role_index');
     }
 }

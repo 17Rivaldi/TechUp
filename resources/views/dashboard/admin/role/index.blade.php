@@ -29,9 +29,22 @@
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $role->name }}</td>
                                         <td class="align-middle">
-                                            <a class="btn btn-primary btn-sm text-xs"
-                                                href="{{ route('role_edit', $role->id) }}" role="button"><i
-                                                    class="fas fa-edit me-1"></i>Edit</a>
+                                            <div class="d-flex flex column flex-md-row textcenter">
+                                                <a class="btn btn-primary btn-sm text-xs me-1"
+                                                    href="{{ route('role_edit', $role->id) }}" role="button"><i
+                                                        class="fas fa-edit me-1"></i>Edit</a>
+                                                <!-- FORM DELETE -->
+                                                <form id="deleteForm_{{ $role->id }}"
+                                                    action="{{ route('role_destroy', ['id' => $role->id]) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button" class="btn btn-danger btn-sm text-xs"
+                                                        onclick="deleteConfirmation('deleteForm_{{ $role->id }}')">
+                                                        <i class="fas fa-trash me-1"></i>Hapus
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach

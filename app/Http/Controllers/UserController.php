@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Hash;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class UserController extends Controller
 {
@@ -47,7 +48,7 @@ class UserController extends Controller
 
         $user->assignRole($request->input('roles'));
 
-
+        Alert::success('success', 'User Berhasil ditambah');
         return redirect()->route('user_index');
     }
 
@@ -90,6 +91,7 @@ class UserController extends Controller
 
         $user->syncRoles($request->input('roles'));
 
+        Alert::success('success', 'User Berhasil diubah');
         return redirect()->route('user_index');
     }
 
@@ -98,13 +100,15 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        $user = User::find($id);
+        $user = User::findOrFaIl($id);
 
         if (!$user) {
-            return redirect()->route('user_index')->with('error', 'Artikel tidak ditemukan.');
+            Alert::error('error', 'User tidak ditemukan.');
+            return redirect()->route('user_index');
         }
         $user->delete();
 
-        return redirect()->route('user_index')->with('success', 'User baerhasil di hapus');
+        Alert::success('success', 'User Berhasil di Hapus');
+        return redirect()->route('user_index');
     }
 }
