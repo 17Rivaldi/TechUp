@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Article;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +22,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Paginator::useBootstrap();
+        View::composer(['web.home', 'web.showall', 'web.detail'], function ($view) {
+            $popularArticles = Article::orderBy('views', 'desc')->take(3)->get();
+            $view->with('popularArticles', $popularArticles);
+        });
     }
 }

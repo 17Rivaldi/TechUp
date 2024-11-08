@@ -8,13 +8,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 
-// Route::get('/', function () {
-//     return view('web.home');
-// });
-
 Auth::routes();
-
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -47,7 +41,10 @@ Route::get('/role/create', [RoleController::class, 'create'])->name('role_create
 Route::post('/role/save', [RoleController::class, 'store'])->name('role_store');
 Route::get('/role/{id}/edit', [RoleController::class, 'edit'])->name('role_edit');
 Route::put('/role/{id}', [RoleController::class, 'update'])->name('role_update');
+Route::delete('/role/{id}', [RoleController::class, 'destroy'])->name('role_destroy');
 
 // Website
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/detail ', [HomeController::class, 'detail'])->name('detail');
+Route::get('/terkini', [HomeController::class, 'show'])->name('terkini');
+Route::get('/{category?}', [HomeController::class, 'show'])->name('show');
+Route::get('/berita/{slug}', [HomeController::class, 'detail'])->name('detail');
