@@ -74,14 +74,19 @@
                             @enderror
                         </div>
 
-                        {{-- <div class="mb-3">
-                            <label for="tag" class="form-label">Tag</label>
-                            <input type="text" class="form-control" id="tag" name="tag"
-                                value="{{ old('tag') }}" required>
-                            @error('tag')
+                        <div class="mb-3">
+                            <label for="tags" class="form-label">Tag</label>
+                            <select class="form-select" id="tags" name="tags[]" multiple>
+                                @foreach ($tags as $tag)
+                                    <option value="{{ $tag->name }}" @if (in_array($tag->name, old('tags', $article->tags->pluck('name')->toArray()))) selected @endif>
+                                        {{ $tag->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('tags')
                                 <small>{{ $message }}</small>
                             @enderror
-                        </div> --}}
+                        </div>
 
                         <button type="submit" class="btn btn-primary">Simpan</button>
                         <a href="{{ route('article_index') }}" class="btn btn-danger" role="button">Batal</a>
@@ -93,7 +98,11 @@
 @endsection
 
 @section('addJs')
+    <!-- CkEditor -->
     <script src="https://cdn.ckeditor.com/ckeditor5/40.2.0/classic/ckeditor.js"></script>
+    <!-- Select2 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script>
         ClassicEditor
             .create(document.querySelector('#description'))
@@ -130,5 +139,13 @@
             .catch(error => {
                 console.error(error);
             });
+
+        $(document).ready(function() {
+            $('#tags').select2({
+                tags: true,
+                tokenSeparators: [',', ' '],
+                placeholder: "Select or type new tags",
+            });
+        });
     </script>
 @endsection

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Drivers\Gd\Driver;
+use Spatie\Tags\Tag;
 
 class ArticleController extends Controller
 {
@@ -28,7 +29,8 @@ class ArticleController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('dashboard.admin.article.create', compact('categories'));
+        $tags = Tag::all();
+        return view('dashboard.admin.article.create', compact('categories', 'tags'));
     }
 
     /**
@@ -41,6 +43,8 @@ class ArticleController extends Controller
             'description' => 'required',
             'category_id' => 'required',
             'image' => 'required|mimes:png,jpg,jpeg|max:2048',
+            'tags' => 'nullable|array',
+            'tags.*' => 'string',
         ]);
 
         if ($validator->fails()) return redirect()->back()->withInput()->withErrors($validator);
@@ -60,7 +64,7 @@ class ArticleController extends Controller
             $thumbImage->save(storage_path('app/public/image-article/' . $image_name));
         }
 
-        Article::create(
+        $article = Article::create(
             [
                 'title' => $request->input('title'),
                 'description' => $request->input('description'),
@@ -69,6 +73,11 @@ class ArticleController extends Controller
                 'publish' => null,
             ]
         );
+
+        // Add Tags
+        if ($request->has('tags')) {
+            $article->attachTags($request->input('tags'));
+        }
 
         Alert::success('success', 'Article Berhasil ditambah');
         return redirect()->route('article_index');
@@ -89,7 +98,8 @@ class ArticleController extends Controller
     {
         $article = Article::findOrFail($id);
         $categories = Category::all();
-        return view('dashboard.admin.article.edit', compact('article', 'categories'));
+        $tags = Tag::all();
+        return view('dashboard.admin.article.edit', compact('article', 'categories', 'tags'));
     }
 
     /**
@@ -102,6 +112,8 @@ class ArticleController extends Controller
             'description' => 'required',
             'category_id' => 'required',
             'image' => 'nullable|mimes:png,jpg,jpeg|max:2048',
+            'tags' => 'nullable|array',
+            'tags.*' => 'string',
         ]);
 
         if ($validator->fails()) return redirect()->back()->withInput()->withErrors($validator);
@@ -135,6 +147,11 @@ class ArticleController extends Controller
             // 'publish' => $request->input('publish'),
         ]);
 
+        // Add Update tags
+        if ($request->has('tags')) {
+            $article->syncTags($request->input('tags'));
+        }
+
         Alert::success('success', 'Article Berhasil diubah');
         return redirect()->route('article_index');
     }
@@ -154,8 +171,6 @@ class ArticleController extends Controller
         if ($article->image) {
             Storage::disk('public')->delete('image-article/' . $article->image);
         }
-
-        // dd($article);
 
         $article->delete();
 

@@ -74,7 +74,7 @@
     </div>
 
     @foreach ($articles as $article)
-        <!-- Modal untuk Detail Article -->
+        <!-- Modal Detail Article -->
         <div class="modal fade custom-modal" id="articleDetail{{ $article->id }}" tabindex="-1"
             aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -104,6 +104,12 @@
                         <div class="mb-2">
                             <h6>Deskripsi</h6>
                             <p>{!! $article->description !!}</p>
+                        </div>
+                        <div class="mb-2">
+                            <h6>Tag</h6>
+                            @foreach ($article->tags as $tag)
+                                <p class="badge bg-primary">{{ $tag->name }}</p>
+                            @endforeach
                         </div>
                         <div class="mb-2">
                             <h6>Publish</h6>
