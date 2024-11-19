@@ -4,13 +4,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <link rel="icon" type="image/png" href="" />
     <title>Dashboard Admin</title>
-    <link rel="icon" type="image/png" href="" />
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
-
-    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
 
     <link id="pagestyle" href="{{ asset('css/argon-dashboard.css?v=2.0.4') }}" rel="stylesheet" />
 
@@ -33,7 +29,12 @@
 
     </main>
 
+    <!-- SeetAlert -->
     @include('sweetalert::alert')
+    <script src="{{ asset('js/sweetalert2@11.js') }}"></script>
+
+    <!-- FontAwesome -->
+    <script src="{{ asset('js/FontAwesome.js') }}"></script>
 
     <!--   Core JS Files   -->
     <script src="{{ asset('js/core/popper.min.js') }}"></script>
@@ -50,9 +51,6 @@
     <!-- DataTables -->
     <script type="text/javascript" src="{{ asset('js/dataTables-1.13.7.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/dataTables.bootstrap5.min.js') }}"></script>
-
-    <!-- SeetAlert -->
-    <script src="{{ asset('js/sweetalert2@11.js') }}"></script>
 
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('js/alert.js') }}"></script>

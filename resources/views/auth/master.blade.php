@@ -10,10 +10,7 @@
 
     <title>{{ config('app.name') }}</title>
     <link rel="icon" type="image/png" href="{{ asset('img/logo-ipeun.png') }}" />
-    <!-- Font Awesome Icons -->
-    {{-- <link rel="stylesheet" href="{{ asset('css/fontawesome.min.css') }}"> --}}
-    <!-- Font Awesome Icons -->
-    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('css/argon-dashboard.css?v=2.0.4') }}" rel="stylesheet" />
 
@@ -22,13 +19,12 @@
 
 <body class="hold-transition login-page">
     <div class="login-box">
-        <div class="login-logo">
-            {{-- {{config('app.name')}} --}}
-        </div>
-
         @yield('content')
     </div>
     <!-- /.login-box -->
+
+    <!-- Font Awesome Icons -->
+    <script src="{{ asset('js/FontAwesome.js') }}"></script>
 
     <!--   Core JS Files   -->
     <script src="{{ asset('js/core/popper.min.js') }}"></script>
