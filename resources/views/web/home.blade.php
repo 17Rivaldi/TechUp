@@ -2,33 +2,16 @@
 
 @section('content')
     <div class="container">
-        {{-- <div class="d-flex justify-content-between align-item-center">
+        <div class="d-flex justify-content-between align-items-center position-relative mb-3 hvr">
             <div class="ms-0">
-                <a href="{{ route('terkini') }}" class="text-decoration-none text-dark">
-                    <h4 class="fw-bold">Terkini</h4>
-                </a>
-                <div class="underline pt-0 ms-0"
-                    style="width: 3rem; height: 4px; background-color: #007bff; margin: 10px auto;">
-                </div>
-            </div>
-            <div class="d-flex align-item-center">
-                <a href="{{ route('terkini') }}" class="text-decoration-none">
-                    Baca Selengkapnya
-                    <i class="fas fa-angle-right ms-1"></i>
-                </a>
-            </div>
-        </div> --}}
-
-        <div class="d-flex justify-content-between align-items-center position-relative mb-3">
-            <div class="ms-0">
-                <a href="{{ route('terkini') }}" class="text-decoration-none text-dark">
+                <a href="{{ route('terkini') }}" class="text-decoration-none text-dark hvr-ttl">
                     <h4 class="fw-bold">Terkini</h4>
                 </a>
                 <div class="underline-btm"></div>
             </div>
             <div class="d-flex align-items-center">
-                <a href="{{ route('terkini') }}" class="btn btn-secondary btn-sm text-decoration-none">
-                    Baca Selengkapnya
+                <a href="{{ route('terkini') }}" class="text-decoration-none fw-medium text-dark hvr-ttl">
+                    Selengkapnya
                     <i class="fas fa-angle-right ms-1"></i>
                 </a>
             </div>
@@ -51,9 +34,11 @@
                                             <div class="image-gradient-overlay rounded"></div>
                                             <div class="card-img-overlay">
                                                 <div class="position-absolute bottom-0 mb-2">
-                                                    <h6 class="badge text-bg-primary fs-6">{{ $article->Category->name }}
+                                                    <h6 class="badge text-bg-primary" style="font-size: 0.8rem">
+                                                        {{ $article->Category->name }}
                                                     </h6>
-                                                    <p class="card-text text-white fs-5 fw-bolder">{{ $article->title }}</p>
+                                                    <p class="card-text text-white fw-bold" style="font-size: 17px">
+                                                        {{ $article->title }}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -77,23 +62,20 @@
         </div>
 
         <div class="row">
-            <!-- Blog entries-->
             <div class="col-lg-8">
-                <!-- Nested row for non-featured blog posts-->
                 <div class="row">
-                    <div class="d-flex justify-content-between align-item-center position-relative mb-3 hvr">
+                    <div class="d-flex justify-content-between align-items-center position-relative mb-3 hvr">
                         <div class="ms-0">
-                            <a href="{{ route('show', ['category' => 'game']) }}" class="text-decoration-none text-dark">
+                            <a href="{{ route('show', ['category' => 'game']) }}"
+                                class="text-decoration-none text-dark hvr-ttl">
                                 <h4 class="fw-bold">Game</h4>
                             </a>
-                            {{-- <div class="underline pt-0 ms-0"
-                                style="width: 3rem; height: 4px; background-color: #007bff; margin: 10px auto;"></div> --}}
                             <div class="underline-ctg"></div>
                         </div>
                         <div class="d-flex align-item-center">
                             <a href="{{ route('show', ['category' => 'game']) }}"
-                                class="text-decoration-none fw-medium text-dark">
-                                Baca Selengkapnya
+                                class="text-decoration-none fw-medium text-dark hvr-ttl">
+                                Selengkapnya
                                 <i class="fas fa-angle-right ms-1"></i>
                             </a>
                         </div>
@@ -101,7 +83,6 @@
 
                     @foreach ($gameArticles as $article)
                         <div class="col-md-6">
-                            <!-- Blog post-->
                             <div class="card mb-4 border-0">
                                 <a href="{{ route('detail', ['slug' => $article->slug]) }}" data-bs-toogle="tooltip"
                                     data-bs-placement="top" title="{{ $article->title }}">
@@ -109,47 +90,51 @@
                                         src="{{ asset('storage/image-article/' . $article->image) }}" alt="..." />
                                 </a>
                                 <div class="card-body px-0">
-                                    <p class="card-text">{{ $article->title }}</p>
-                                    <div class="small text-muted">{{ $article->created_at->format('d F Y') }}</div>
+                                    <h6 class="card-text fw-semibold">{{ $article->title }}</h6>
+                                    <div class="small text-muted" style="color: #6c757d !important">
+                                        {{ $article->created_at->format('d F Y') }}</div>
                                 </div>
                             </div>
                         </div>
                     @endforeach
                 </div>
 
-                <div class="row">
-                    <div class="d-flex justify-content-between align-item-center position-relative mb-3 hvr">
-                        <div class="ms-0">
-                            <a href="{{ route('show', ['category' => 'ai']) }}" class="text-decoration-none text-dark">
-                                <h4 class="fw-bold">AI</h4>
-                            </a>
-                            <div class="underline-ctg"></div>
+                @foreach ($otherArticles as $categoryName => $articles)
+                    <div class="row">
+                        <div class="d-flex justify-content-between align-items-center position-relative mb-3 hvr">
+                            <div class="ms-0">
+                                <a href="{{ route('show', ['category' => $categoryName]) }}"
+                                    class="text-decoration-none text-dark hvr-ttl">
+                                    <h4 class="fw-bold">{{ ucfirst($categoryName) }}</h4>
+                                </a>
+                                <div class="underline-ctg"></div>
+                            </div>
+                            <div class="d-flex align-item-center">
+                                <a href="{{ route('show', ['category' => $categoryName]) }}"
+                                    class="text-decoration-none fw-medium text-dark hvr-ttl">
+                                    Selengkapnya
+                                    <i class="fas fa-angle-right ms-1"></i>
+                                </a>
+                            </div>
                         </div>
-                        <div class="d-flex align-item-center">
-                            <a href="{{ route('show', ['category' => 'ai']) }}"
-                                class="text-decoration-none fw-medium text-dark">
-                                Baca Selengkapnya
-                                <i class="fas fa-angle-right ms-1"></i>
-                            </a>
-                        </div>
+                        @foreach ($articles as $article)
+                            <div class="col-md-4">
+                                <div class="card mb-4 border-0">
+                                    <a href="{{ route('detail', ['slug' => $article->slug]) }}" data-bs-toogle="tooltip"
+                                        data-bs-placement="top" title="{{ $article->title }}" class="img-box">
+                                        <img class="card-img-top rounded img-hvr"
+                                            src="{{ asset('storage/image-article/' . $article->image) }}" alt="..." />
+                                    </a>
+                                    <div class="card-body px-0">
+                                        <h6 class="card-text fw-semibold">{{ $article->title }}</h6>
+                                        <div class="small text-muted" style="color: #6c757d !important">
+                                            {{ $article->created_at->format('d F Y') }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
-
-                    @foreach ($aiArticles as $article)
-                        <div class="col-md-4">
-                            <div class="card mb-4 border-0">
-                                <a href="{{ route('detail', ['slug' => $article->slug]) }}" data-bs-toogle="tooltip"
-                                    data-bs-placement="top" title="{{ $article->title }}">
-                                    <img class="card-img-top rounded"
-                                        src="{{ asset('storage/image-article/' . $article->image) }}" alt="..." />
-                                </a>
-                                <div class="card-body px-0">
-                                    <p class="card-text">{{ $article->title }}</p>
-                                    <div class="small text-muted">{{ $article->created_at->format('d F Y') }}</div>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
+                @endforeach
             </div>
 
             <!-- Side widgets-->
@@ -187,21 +172,16 @@
             .carousel-control-prev,
             .carousel-control-next {
                 width: 5%;
-                /* Atur lebar agar lebih kecil */
                 opacity: 0;
-                /* Sembunyikan tombol saat tidak di-hover */
                 transition: opacity 0.3s ease;
-                /* Efek transisi */
             }
 
             .carousel-control-prev {
                 left: 15px;
-                /* Atur jarak dari sisi kiri */
             }
 
             .carousel-control-next {
                 right: 15px;
-                /* Atur jarak dari sisi kanan */
             }
         }
 
@@ -216,21 +196,16 @@
             .carousel-control-prev,
             .carousel-control-next {
                 width: 5%;
-                /* Atur lebar agar lebih kecil */
                 opacity: 0;
-                /* Sembunyikan tombol saat tidak di-hover */
                 transition: opacity 0.3s ease;
-                /* Efek transisi */
             }
 
             .carousel-control-prev {
                 left: 10px;
-                /* Atur jarak dari sisi kiri */
             }
 
             .carousel-control-next {
                 right: 10px;
-                /* Atur jarak dari sisi kanan */
             }
         }
 
@@ -245,26 +220,20 @@
             .carousel-control-prev,
             .carousel-control-next {
                 width: 5%;
-                /* Atur lebar agar lebih kecil */
                 opacity: 0;
-                /* Sembunyikan tombol saat tidak di-hover */
                 transition: opacity 0.3s ease;
-                /* Efek transisi */
             }
 
             .carousel-control-prev {
                 left: 10px;
-                /* Atur jarak dari sisi kiri */
             }
 
             .carousel-control-next {
                 right: 10px;
-                /* Atur jarak dari sisi kanan */
             }
 
             .position-relative {
                 padding-bottom: 4px;
-                /* Ruang untuk garis */
             }
         }
 
@@ -293,10 +262,6 @@
             height: 5px;
             width: calc(98.5% - 3rem);
             max-width: calc(100vw - 2rem);
-        }
-
-        .hvr a:hover {
-            color: #007bff !important;
         }
     </style>
 @endsection

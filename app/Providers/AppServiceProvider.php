@@ -6,6 +6,7 @@ use App\Models\Article;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Spatie\Tags\Tag;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,9 +24,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrap();
-        View::composer(['web.home', 'web.showall', 'web.detail'], function ($view) {
-            $popularArticles = Article::orderBy('views', 'desc')->take(3)->get();
-            $view->with('popularArticles', $popularArticles);
+        View::composer(['web.home', 'web.showall', 'web.detail', 'web.showsearch'], function ($view) {
+            $popularArticles = Article::orderBy('views', 'desc')->take(5)->get();
+            $tags = Tag::all();
+            $users = auth()->user();
+            $view->with(compact('popularArticles', 'tags', 'users'));
         });
     }
 }

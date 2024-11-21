@@ -1,0 +1,78 @@
+/* -------------------- Web Page -------------------- */
+
+#scrollToTopBtn {
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    display: none;
+    z-index: 1000;
+    transition: opacity 0.3s;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    border-radius: 50%;
+}
+
+#scrollToTopBtn.show {
+    display: block;
+}
+
+body {
+    font-family: "Montserrat", sans-serif;
+}
+
+/* ===== Navbar ===== */
+.nav-link.active {
+    color: #007bff !important;
+}
+
+.hvr .hvr-ttl:hover,
+.hvr .nav-item .nav-link:hover {
+    color: #007bff !important;
+    transition: color 0.5s ease;
+}
+
+.dropdown-toggle::after {
+    display: none !important;
+}
+
+.dropdown-toggle {
+    transition: box-shadow 0.3s, transform 0.2s;
+}
+
+.dropdown-toggle:hover {
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.8);
+    transform: scale(1.05);
+}
+
+.dropdown-toggle:focus {
+    box-shadow: 0 0 10px rgba(0, 123, 255, 1);
+    outline: none;
+}
+/* End Navbar */
+
+/* ===== Image Hover ===== */
+.card-img-top {
+    transition: transform 0.2s ease;
+}
+
+.card-img-top:hover {
+    transform: scale(1.05);
+}
+
+.img-box {
+    border-radius: 5px;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+}
+
+.img-hvr {
+    transition: transform 0.5s ease;
+}
+
+.img-hvr:hover {
+    transform: scale(1.1);
+    filter: contrast(70%);
+}
+/* End Image Hover */

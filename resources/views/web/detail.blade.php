@@ -6,54 +6,57 @@
             <div class="col-lg-8">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb fw-semibold">
-                        <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-decoration-none">
-                                <i class="fas fa-home me-1"></i>Home</a></li>
-                        {{-- <li class="breadcrumb-item"><a href="">Event</a></li> --}}
-                        <li class="breadcrumb-item active" aria-current="page">{{ $article->title }}</li>
-                    </ol>
-                </nav>
-
-                <h4 class="fw-bold">{{ $article->title }}</h4>
-                <div class="text-center">
-                    <p class="mb-0">{{ $article->created_at->format('l, d F Y H:i') }}</p>
-                    <p>Rivaldi Syaputra -
-                        <span class="text-primary">
+                        <li class="breadcrumb-item">
+                            <a href="{{ route('home') }}" class="text-decoration-none">
+                                <i class="fas fa-home me-1"></i>Home
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
                             <a href="{{ route('show', ['category' => $article->Category->name]) }}"
                                 class="text-decoration-none">
                                 {{ $article->Category->name }}
                             </a>
-                        </span>
-                    </p>
-                </div>
-                <img src="{{ asset('storage/image-article/' . $article->image) }}" class="card-img rounded" alt="...">
-                <div class="my-3">
-                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quod ipsum sit assumenda ea voluptatem,
-                        libero odio. Soluta aliquid beatae, autem deserunt illum debitis officia voluptatem mollitia id
-                        earum impedit dolores eveniet ducimus nemo delectus quas placeat? Beatae fuga, error maxime facere
-                        maiores voluptatum amet reiciendis. Non fugit adipisci cupiditate, facere numquam obcaecati magnam
-                        dignissimos quidem aspernatur corporis, reiciendis facilis optio repellendus dicta quisquam omnis
-                        tempora praesentium esse deserunt perferendis minima. Quasi excepturi iste temporibus ipsum saepe
-                        sit tenetur suscipit facere minus earum perferendis, repellat id odio dolores nisi sequi beatae.
-                        Consequatur culpa sapiente, voluptatum neque iste sequi non minus at.</p>
-                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Deleniti iste itaque tempore accusamus
-                        quidem earum at iure commodi voluptate dolor.</p>
-                    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Numquam iste consequuntur error ipsa
-                        eveniet cum, quaerat quam corporis accusantium sint dignissimos voluptates cupiditate, culpa facilis
-                        quisquam nisi similique? Earum non enim, omnis ducimus magnam consectetur.</p>
-                </div>
-                <div>
-                    <p class="badge bg-primary">AI</p>
-                </div>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ $article->title }}</li>
+                    </ol>
+                </nav>
 
-                <div class="d-flex justify-content-between align-items-center position-relative mb-3 hvr">
+                <section class="detail-article">
+                    <div class="text-center">
+                        <h4 class="fw-bold my-4">{{ $article->title }}</h4>
+                        <p class="mb-0">{{ $article->created_at->locale('id')->isoFormat('dddd, D MMMM YYYY HH:mm') }}</p>
+                        <p>{{ $article->user->name }} -
+                            <span class="text-primary fw-bolder">
+                                <a href="{{ route('show', ['category' => $article->Category->name]) }}"
+                                    class="text-decoration-none">
+                                    {{ $article->Category->name }}
+                                </a>
+                            </span>
+                        </p>
+                    </div>
+                    <img src="{{ asset('storage/image-article/' . $article->image) }}" class="card-img rounded"
+                        alt="...">
+                    <div class="my-3">
+                        <p>{!! $article->description !!}</p>
+                    </div>
+                    <div>
+                        @foreach ($article->tags as $tag)
+                            <a href="{{ route('showTag', ['tagslug' => $tag->slug]) }}" class="text-decoration-none">
+                                <h1 class="badge bg-primary fw-bolder">{{ $tag->name }}</h1>
+                            </a>
+                        @endforeach
+                    </div>
+                </section>
+
+                <div class="d-flex justify-content-between align-items-center position-relative mb-3 mt-4 hvr">
                     <div class="ms-0">
-                        <a href="{{ route('terkini') }}" class="text-decoration-none text-dark">
+                        <a href="{{ route('terkini') }}" class="text-decoration-none text-dark hvr-ttl">
                             <h4 class="fw-bold">Terkini</h4>
                         </a>
                         <div class="underline-btm"></div>
                     </div>
                     <div class="d-flex align-item-center">
-                        <a href="{{ route('terkini') }}" class="text-decoration-none fw-medium text-dark">
+                        <a href="{{ route('terkini') }}" class="text-decoration-none fw-medium text-dark hvr-ttl">
                             Baca Selengkapnya
                             <i class="fas fa-angle-right ms-2"></i>
                         </a>
@@ -65,12 +68,13 @@
                         <div class="col-lg-4">
                             <div class="card mb-4 border-0">
                                 <a href="{{ route('detail', ['slug' => $article->slug]) }}" data-bs-toogle="tooltip"
-                                    data-bs-placement="top" title="{{ $article->title }}">
-                                    <img class="card-img-top rounded"
-                                        src="{{ asset('storage/image-article/' . $article->image) }}" alt="..." />
+                                    data-bs-placement="top" title="{{ $article->title }}" class="img-box">
+                                    <img class="card-img-top rounded img-hvr"
+                                        src="{{ asset('storage/image-article/' . $article->image) }}"
+                                        alt="gambar {{ $article->title }}" />
                                 </a>
                                 <div class="card-body px-0">
-                                    <p class="card-text">{{ $article->title }}</p>
+                                    <h6 class="card-text fw-bold">{{ $article->title }}</h6>
                                     <div class="small text-muted">{{ $article->created_at->format('d F Y') }}</div>
                                 </div>
                             </div>
@@ -122,10 +126,6 @@
             height: 5px;
             width: calc(100% - 3rem);
             max-width: calc(100vw - 2rem);
-        }
-
-        .hvr a:hover {
-            color: #007bff !important;
         }
     </style>
 @endsection

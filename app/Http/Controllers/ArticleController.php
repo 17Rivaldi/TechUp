@@ -19,7 +19,12 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles = Article::all();
+        if (auth()->user()->hasRole('admin')) {
+            $articles = Article::all();
+        } else {
+            $articles = Article::where('user_id', auth()->id())->get();
+        }
+
         return view('dashboard.admin.article.index', compact('articles'));
     }
 
@@ -71,12 +76,14 @@ class ArticleController extends Controller
                 'category_id' => $request->input('category_id'),
                 'image' => $image_name,
                 'publish' => null,
+                'user_id' => auth()->user()->id,
             ]
         );
 
         // Add Tags
         if ($request->has('tags')) {
-            $article->attachTags($request->input('tags'));
+            $tags = array_map('strtolower', $request->input('tags'));
+            $article->attachTags($tags);
         }
 
         Alert::success('success', 'Article Berhasil ditambah');
@@ -144,12 +151,13 @@ class ArticleController extends Controller
             'description' => $request->input('description'),
             'category_id' => $request->input('category_id'),
             'image' => isset($image_name) ? $image_name : $article->image,
-            // 'publish' => $request->input('publish'),
+            'publish' => $request->has('publish') ? now() : null,
         ]);
 
         // Add Update tags
         if ($request->has('tags')) {
-            $article->syncTags($request->input('tags'));
+            $tags = array_map('strtolower', $request->input('tags'));
+            $article->syncTags($tags);
         }
 
         Alert::success('success', 'Article Berhasil diubah');

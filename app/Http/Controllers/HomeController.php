@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Spatie\Tags\Tag;
 use App\Models\Article;
 use App\Models\Category;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -25,27 +27,50 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // $articles = Article::all();
         // Mengambil 6 artikel terbaru
         $articles = Article::latest()->take(6)->get();
+        // Menampilkan Artikel hanya yang sudah di publish
+        // $articles = Article::whereNotNull('publish')->latest()->take(6)->get();
         $gameArticles = Article::whereHas('Category', function ($query) {
             $query->where('name', 'game');
-        })->get(); //ganti menjadi latest()->take()->Get(); untuk mengambil berapa data dan terbaru
-        $aiArticles = Article::whereHas('Category', function ($query) {
-            $query->where('name', 'ai');
-        })->get();
-        return view('web.home', compact('articles', 'gameArticles', 'aiArticles'));
+        })->latest()->take(6)->get();
+        $otherArticles = Article::whereDoesntHave('Category', function ($query) {
+            $query->whereIn('name', ['game']);
+        })->latest()->take(6)->get()->groupBy('category.name');
+        return view('web.home', compact('articles', 'gameArticles', 'otherArticles'));
     }
 
-    public function show($category = null)
+    public function show(Request $request, $category = null)
     {
+        if ($category && !Category::where('name', $category)->exists()) {
+            abort(404);
+        }
+
         $articles = Article::when($category, function ($query, $category) {
             $query->whereHas('Category', function ($q) use ($category) {
                 $q->where('name', $category);
             });
-        })->paginate(5);
+        })->latest()->paginate(5);
+
+        $articles->getCollection()->transform(function ($article) {
+            $article->description = Str::limit($article->description, 200, preserveWords: true);
+            return $article;
+        });
 
         return view('web.showall', compact('articles', 'category'));
+    }
+
+    public function showTag($tagSlug)
+    {
+        $tag = Tag::where('slug->id', $tagSlug)->firstOrFail();
+        $articles = Article::withAnyTags([$tag->name])->latest()->paginate(5);
+
+        $articles->getCollection()->transform(function ($article) {
+            $article->description = Str::limit($article->description, 200, preserveWords: true);
+            return $article;
+        });
+
+        return view('web.showall', compact('articles', 'tag'));
     }
 
     public function detail($slug)
@@ -55,5 +80,26 @@ class HomeController extends Controller
         $category = Category::all();
         $otherArticle = Article::latest()->take(3)->get();
         return view('web.detail', compact('article', 'category', 'otherArticle'));
+    }
+
+    public function search(Request $request)
+    {
+        // Ambil query pencarian dari input form
+        $query = $request->input('search');
+
+        // Jika query ada, lakukan pencarian pada artikel
+        $articles = Article::when($query, function ($queryBuilder) use ($query) {
+            return $queryBuilder->where('title', 'like', '%' . $query . '%')
+                ->orWhere('description', 'like', '%' . $query . '%');
+        })->latest()->paginate(5);
+
+        // Transformasi deskripsi artikel untuk mempersingkat
+        $articles->getCollection()->transform(function ($article) {
+            $article->description = Str::limit($article->description, 200, preserveWords: true);
+            return $article;
+        });
+
+        // Kembalikan view dengan data artikel
+        return view('web.showall', compact('articles', 'query'));
     }
 }
