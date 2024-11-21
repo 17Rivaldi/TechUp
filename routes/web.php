@@ -7,6 +7,7 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProfileController;
 
 Auth::routes();
 
@@ -45,11 +46,18 @@ Route::middleware(['auth', 'role:admin|writer|editor'])->group(function () {
     Route::delete('/article/{id}', [ArticleController::class, 'destroy'])->name('article_destroy');
 });
 
-
+// Page Profile
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    Route::put('/profile/{id}', [ProfileController::class, 'update'])->name('profile_update');
+    Route::put('/change-password/{id}', [ProfileController::class, 'changePassword'])->name('change_password');
+});
 
 // Website
 Route::get('/', [HomeController::class, 'index'])->name('home');
-
+Route::get('/terms-conditions', function () {
+    return view('web.termsConditions');
+})->name('termsConditions');
 Route::get('/terkini', [HomeController::class, 'show'])->name('terkini');
 Route::get('/search', [HomeController::class, 'search'])->name('search');
 Route::get('/{category?}', [HomeController::class, 'show'])->name('show');
