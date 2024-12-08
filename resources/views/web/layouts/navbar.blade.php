@@ -16,10 +16,11 @@
                         href="{{ route('terkini') }}">Terkini</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#!">Review</a>
+                    <a class="nav-link" href="{{ route('show', ['category' => 'review']) }}">Review</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="#">Tutorial</a>
+                    <a class="nav-link" aria-current="page"
+                        href="{{ route('show', ['category' => 'tutorial']) }}">Tutorial</a>
                 </li>
             </ul>
             <form action="{{ route('search') }}" method="GET" class="d-flex ms-auto">
@@ -51,18 +52,20 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end mt-4" aria-labelledby="dropdownMenuButton">
                             <li>
-                                <a class="dropdown-item" href="{{ route('profile') }}"><i
+                                <a class="dropdown-item text-primary" href="{{ route('profile') }}"><i
                                         class="far fa-user-circle me-2"></i>Profil</a>
                             </li>
-                            <li>
-                                <a class="dropdown-item" href="">
-                                    <i class="fas fa-cog me-2"></i>Pengaturan</a>
-                            </li>
+                            @if (auth()->user()->hasrole('admin|writer|editor'))
+                                <li>
+                                    <a class="dropdown-item text-secondary" href="{{ route('dashboard') }}">
+                                        <i class="fa-solid fa-gauge-high me-2"></i>Dashboard</a>
+                                </li>
+                            @endif
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
                             <li>
-                                <a class="dropdown-item" href="{{ route('logout') }}"
+                                <a class="dropdown-item text-danger" href="{{ route('logout') }}"
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     <i class="fas fa-sign-out-alt me-2"></i>Keluar
                                 </a>

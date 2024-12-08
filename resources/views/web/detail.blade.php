@@ -41,6 +41,7 @@
                     </div>
                     <div>
                         @foreach ($article->tags as $tag)
+                            <i class="fa-solid fa-tags me-2"></i>
                             <a href="{{ route('showTag', ['tagslug' => $tag->slug]) }}" class="text-decoration-none">
                                 <h1 class="badge bg-primary fw-bolder">{{ $tag->name }}</h1>
                             </a>
@@ -83,7 +84,7 @@
                 </div>
 
                 {{-- Commentar --}}
-                <div class="d-flex justify-content-between align-item-center">
+                {{-- <div class="d-flex justify-content-between align-item-center">
                     <div class="ms-0">
                         <h4 class="fw-bold">Komentar</h4>
                         <div class="underline pt-0 ms-0"
@@ -98,7 +99,7 @@
                     <div class="d-flex justify-content-end">
                         <button class="btn btn-primary mt-3 me-4">Kirim</button>
                     </div>
-                </div>
+                </div> --}}
             </div>
 
             <!-- Side widgets-->
@@ -126,6 +127,12 @@
             height: 5px;
             width: calc(100% - 3rem);
             max-width: calc(100vw - 2rem);
+        }
+
+        /* Style Image CKEditor */
+        figure img {
+            width: 100%;
+            height: auto;
         }
     </style>
 @endsection

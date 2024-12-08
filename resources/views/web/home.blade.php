@@ -103,21 +103,21 @@
                     <div class="row">
                         <div class="d-flex justify-content-between align-items-center position-relative mb-3 hvr">
                             <div class="ms-0">
-                                <a href="{{ route('show', ['category' => $categoryName]) }}"
+                                <a href="{{ route('show', ['category' => $articles->first()->category->slug]) }}"
                                     class="text-decoration-none text-dark hvr-ttl">
-                                    <h4 class="fw-bold">{{ ucfirst($categoryName) }}</h4>
+                                    <h4 class="fw-bold">{{ Str::title($categoryName) }}</h4>
                                 </a>
                                 <div class="underline-ctg"></div>
                             </div>
                             <div class="d-flex align-item-center">
-                                <a href="{{ route('show', ['category' => $categoryName]) }}"
+                                <a href="{{ route('show', ['category' => $articles->first()->category->slug]) }}"
                                     class="text-decoration-none fw-medium text-dark hvr-ttl">
                                     Selengkapnya
                                     <i class="fas fa-angle-right ms-1"></i>
                                 </a>
                             </div>
                         </div>
-                        @foreach ($articles as $article)
+                        @foreach ($articles->take(6) as $article)
                             <div class="col-md-4">
                                 <div class="card mb-4 border-0">
                                     <a href="{{ route('detail', ['slug' => $article->slug]) }}" data-bs-toogle="tooltip"

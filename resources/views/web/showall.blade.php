@@ -8,10 +8,14 @@
                     <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-decoration-none">
                             <i class="fas fa-home me-1"></i>Home</a></li>
                     <li class="breadcrumb-item active" aria-current="page">
-                        @if (isset($query))
+                        @if (request()->routeIs('recommended'))
+                            Rekomendasi Editor
+                        @elseif (request()->routeIs('popular'))
+                            Popular
+                        @elseif (isset($query))
                             Search: {{ $query }}
                         @elseif (isset($category))
-                            {{ ucfirst($category) }}
+                            {{ Str::title($category->name) }}
                         @elseif (isset($tag))
                             # {{ ucfirst($tag->name) }}
                         @else
@@ -25,10 +29,14 @@
                 <div class="d-flex justify-content-between align-item-center">
                     <div class="ms-0">
                         <h4 class="fw-bold">
-                            @if (isset($query))
+                            @if (request()->routeIs('recommended'))
+                                Rekomendasi Editor
+                            @elseif (request()->routeIs('popular'))
+                                Popular
+                            @elseif (isset($query))
                                 Search: {{ $query }}
                             @elseif (isset($category))
-                                {{ ucfirst($category) }}
+                                {{ Str::title($category->name) }}
                             @elseif (isset($tag))
                                 # {{ ucfirst($tag->name) }}
                             @else
