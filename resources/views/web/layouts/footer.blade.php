@@ -7,31 +7,47 @@
                     <img src="{{ asset('assets/logoname.png') }}" alt="" width="20%" height="auto">
                 </div>
                 <div class="col-lg-8">
-                    <div class="row fw-bold">
-                        <div class="col-4">
+                    <div class="row fw-bold hvr">
+                        <div class="col-4 foot-item">
                             <div class="mb-1">
                                 <a href="{{ route('terkini') }}" class="text-decoration-none text-dark">
                                     Terkini
                                 </a>
                             </div>
                             <div class="mb-1">
-                                <a href="" class="text-decoration-none text-dark">
+                                <a href="{{ route('popular') }}" class="text-decoration-none text-dark">
                                     Terpopuler
                                 </a>
                             </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-4 foot-item">
                             <div class="mb-1">
-                                <p>Pilihan Editor</p>
+                                <a href="{{ route('recommended') }}" class="text-decoration-none text-dark">
+                                    Rekomendasi Editor
+                                </a>
+                            </div>
+                            <div class="mb-1">
+                                <a href="{{ route('show', ['category' => 'tutorial']) }}"
+                                    class="text-decoration-none text-dark">
+                                    Tutorial
+                                </a>
+                            </div>
+                            <div class="mb-1">
+                                <a href="{{ route('show', ['category' => 'gadget']) }}"
+                                    class="text-decoration-none text-dark">
+                                    {{ ucfirst('Gadget') }}
+                                </a>
                             </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-4 foot-item">
                             <div class="mb-1">
                                 <a href="{{ auth()->check() ? route('profile') : route('login') }}"
                                     class="text-decoration-none text-dark">
                                     {{ auth()->check() ? 'Profile' : 'Masuk' }}
                                 </a>
-                                @if (auth()->check())
+                            </div>
+                            @if (auth()->check())
+                                <div class="mb-1">
                                     <a href="{{ route('logout') }}" class="text-decoration-none text-dark"
                                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                         Logout
@@ -40,8 +56,8 @@
                                         style="display: none;">
                                         @csrf
                                     </form>
-                                @endif
-                            </div>
+                                </div>
+                            @endif
                             <div class="mb-1">
                                 <a href="{{ route('termsConditions') }}" class="text-decoration-none text-dark">
                                     Ketentuan Pengguna
@@ -54,7 +70,7 @@
         </div>
         <div class="container">
             <hr style="color: #387ADF">
-            <p class="m-0 text-center text-dark">Copyright &copy; TechUp 2024</p>
+            <h6 class="m-0 text-center text-dark">Copyright &copy; TechUp 2024</h6>
         </div>
     </div>
 </footer>
