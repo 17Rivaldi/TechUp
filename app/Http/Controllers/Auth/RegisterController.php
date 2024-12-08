@@ -28,7 +28,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -63,21 +63,17 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        // Create New Users
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
 
-        // Memberikan default Role saat register
-        // $user = User::create([
-        //     'name' => $data['name'],
-        //     'email' => $data['email'],
-        //     'password' => Hash::make($data['password']),
-        // ]);
+        // Add default role after registration
+        $user->assignRole('user');
 
-        // $user->assignRole('user');
-
-        // return $user;
+        toast('Selamat Datang.' . '<br><span class="text-danger">Segera Cek Email untuk Memverifikasi Akun Anda.</span>', 'info')->position('top');
+        return $user;
     }
 }

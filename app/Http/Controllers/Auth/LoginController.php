@@ -37,4 +37,15 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
         $this->middleware('auth')->only('logout');
     }
+
+    protected function redirectTo()
+    {
+        if (auth()->user()->hasRole('user')) {
+            toast('Selamat Datang Kembali ' . auth()->user()->name, 'success');
+            return '/';
+        }
+
+        toast('Selamat Datang Kembali ' . auth()->user()->name, 'success')->position('top');
+        return '/dashboard';
+    }
 }

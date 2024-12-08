@@ -9,7 +9,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name') }}</title>
-    <link rel="icon" type="image/png" href="{{ asset('img/logo-ipeun.png') }}" />
+    <link rel="icon" type="image/png" href="{{ asset('assets/logo.png') }}" />
 
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('css/argon-dashboard.css?v=2.0.4') }}" rel="stylesheet" />

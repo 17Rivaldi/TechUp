@@ -17,48 +17,62 @@
             <div class="col-xl-4 col-lg-5 col-md-7 mx-auto">
                 <div class="card z-index-0 shadow">
                     <div class="card-header text-center pt-4">
-                        <h5>Register</h5>
+                        <h5>Registrasi</h5>
                     </div>
                     <div class="card-body">
                         <form method="POST" action="{{ route('register') }}">
                             @csrf
                             <div class="mb-3">
-                                <input id="name" type="text"
-                                    class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}"
+                                <input id="name" type="text" class="form-control" value="{{ old('name') }}"
                                     required autocomplete="name" autofocus name="name" placeholder="Name"
                                     aria-label="Name">
+                                @error('name')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
 
                             <div class="mb-3">
-                                <input id="email" type="email"
-                                    class="form-control @error('email') is-invalid @enderror" name="email"
+                                <input id="email" type="email" class="form-control" name="email"
                                     value="{{ old('email') }}" required autocomplete="email" placeholder="Email"
                                     aria-label="Email">
+                                @error('email')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
 
-                            <div class="mb-3 input-group">
-                                <input id="password" type="password"
-                                    class="form-control @error('password') is-invalid @enderror" name="password" required
-                                    autocomplete="new-password" placeholder="Password" aria-label="Password">
-                                <span class="input-group-text toggle-password" data-target="password">
-                                    <i class="fas fa-eye"></i>
-                                </span>
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <input id="password" type="password" class="form-control" name="password" required
+                                        autocomplete="new-password" placeholder="Password" aria-label="Password">
+                                    <span class="input-group-text toggle-password" data-target="password">
+                                        <i class="fas fa-eye"></i>
+                                    </span>
+                                </div>
+                                @error('password')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
 
-                            <div class="mb-3 input-group">
-                                <input id="password-confirm" type="password" class="form-control"
-                                    name="password_confirmation" required autocomplete="new-password"
-                                    placeholder="Confirm Password" aria-label="Password">
-                                <span class="input-group-text toggle-password" data-target="password-confirm">
-                                    <i class="fas fa-eye"></i>
-                                </span>
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <input id="password-confirm" type="password" class="form-control"
+                                        name="password_confirmation" required autocomplete="new-password"
+                                        placeholder="Confirm Password" aria-label="Password">
+                                    <span class="input-group-text toggle-password" data-target="password-confirm">
+                                        <i class="fas fa-eye"></i>
+                                    </span>
+                                </div>
+                                @error('password-confirm')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
 
                             <div class="form-check form-check-info text-start">
                                 <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked
                                     required>
                                 <label class="form-check-label" for="flexCheckDefault">
-                                    I agree the <a class="text-dark font-weight-bolder">Terms and Conditions</a>
+                                    Saya setuju dengan <a class="text-dark font-weight-bolder"
+                                        href="{{ route('termsConditions') }}">Syarat dan Ketentuan</a>
                                 </label>
                             </div>
 
@@ -66,7 +80,7 @@
                                 <button type="submit" class="btn bg-gradient-dark w-100 my-4 mb-2">Sign
                                     up</button>
                             </div>
-                            <p class="text-sm mt-3 mb-0">Already have an account? <a href="{{ route('login') }}"
+                            <p class="text-sm mt-3 mb-0">Sudah mempunyai akun? <a href="{{ route('login') }}"
                                     class="text-dark font-weight-bolder">Sign in</a></p>
                         </form>
                     </div>
