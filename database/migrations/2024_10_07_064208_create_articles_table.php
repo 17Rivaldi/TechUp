@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->string('image');
             $table->dateTime('publish')->nullable();
+            $table->boolean('recommended')->default(false);
             $table->integer('views')->default(0);
             $table->timestamps();
         });
