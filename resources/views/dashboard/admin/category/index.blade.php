@@ -20,6 +20,7 @@
                                 <tr class="text-sm">
                                     <th>No</th>
                                     <th>Nama</th>
+                                    <th>Slug</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -27,6 +28,7 @@
                                 <tr class="align-middle">
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $category->name }}</td>
+                                    <td>{{ $category->slug }}</td>
                                     <td class="align-middle">
                                         <div class="d-flex flex-column flex-md-row text-center">
                                             <a class="btn btn-primary btn-sm text-xs me-1"

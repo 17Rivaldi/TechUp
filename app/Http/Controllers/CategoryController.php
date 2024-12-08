@@ -35,7 +35,7 @@ class CategoryController extends Controller
         ]);
 
         Category::create([
-            'name' => $request->input('name'),
+            'name' => strtolower($request->input('name')),
         ]);
 
         Alert::success('success', 'Category Berhasil ditambah');
@@ -69,7 +69,7 @@ class CategoryController extends Controller
         ]);
 
         $category = Category::findOrFaIl($id);
-        $category->name = $request->input('name');
+        $category->name = strtolower($request->input('name'));
         $category->save();
 
         Alert::success('success', 'Category Berhasil diubah');

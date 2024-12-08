@@ -21,10 +21,16 @@
                         <div class="mb-3">
                             <label for="name" class="form-label">Nama Category</label>
                             <input type="text" class="form-control" id="name" name="name"
-                                value="{{ old('name') }}" required>
+                                value="{{ old('name') }}" required autofocus>
                             @error('name')
                                 <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="slug" class="form-label">Slug</label>
+                            <input type="text" class="form-control" id="slug" name="slug"
+                                value="{{ old('slug') }}" disabled>
                         </div>
 
                         <button type="submit" class="btn btn-primary">Tambah Category</button>

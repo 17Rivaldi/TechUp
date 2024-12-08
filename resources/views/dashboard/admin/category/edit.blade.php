@@ -28,6 +28,12 @@
                             @enderror
                         </div>
 
+                        <div class="mb-3">
+                            <label for="" class="form-label">Slug</label>
+                            <input type="text" class="form-control" id="slug" name="slug"
+                                value="{{ old('slug', $categories->slug) }}" disabled>
+                        </div>
+
                         <button type="submit" class="btn btn-primary">Simpan</button>
                         <a href="{{ route('category_index') }}" class="btn btn-danger" role="button">Batal</a>
                     </form>
