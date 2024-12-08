@@ -25,10 +25,11 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrap();
         View::composer(['web.home', 'web.showall', 'web.detail', 'web.showsearch'], function ($view) {
-            $popularArticles = Article::orderBy('views', 'desc')->take(5)->get();
+            $popularArticles = Article::published()->orderBy('views', 'desc')->take(5)->get();
+            $recommendedArticles = Article::published()->where('recommended', true)->take(5)->get();
             $tags = Tag::all();
             $users = auth()->user();
-            $view->with(compact('popularArticles', 'tags', 'users'));
+            $view->with(compact('popularArticles', 'recommendedArticles', 'tags', 'users'));
         });
     }
 }

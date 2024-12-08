@@ -24,6 +24,9 @@
                                     <th>Slug</th>
                                     <th>Kategori</th>
                                     <th>Publish</th>
+                                    @if (auth()->user()->hasRole(['admin', 'editor']))
+                                        <th>Rekomendasi</th>
+                                    @endif
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -38,29 +41,80 @@
                                             @if (is_null($article->publish))
                                                 <span>Belum Dipublikasikan</span>
                                             @else
-                                                <span>Dipublikasikan pada {{ $article->publish }}</span>
+                                                <span>{{ \Carbon\Carbon::parse($article->publish)->format('d F Y H:i:s') }}</span>
                                             @endif
                                         </td>
+                                        @if (auth()->user()->hasRole(['admin', 'editor']))
+                                            <td>
+                                                @if ($article->recommended)
+                                                    <span>Direkomendasikan</span>
+                                                @endif
+                                            </td>
+                                        @endif
                                         <td class="align-middle">
-                                            <div class="d-flex flex-column flex-md-row text-center">
-                                                <button type="button" class="btn btn-warning btn-sm text-xs"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#articleDetail{{ $article->id }}">
-                                                    <i class="fas fa-eye me-1"></i>Detail</button>
-                                                <a class="btn btn-primary btn-sm text-xs mx-1"
-                                                    href="{{ route('article_edit', $article->id) }}" role="button"><i
-                                                        class="fas fa-edit me-1"></i>Edit</a>
-                                                <!-- FORM DELETE -->
-                                                <form id="deleteForm_{{ $article->id }}"
-                                                    action="{{ route('article_destroy', ['id' => $article->id]) }}"
-                                                    method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="button" class="btn btn-danger btn-sm text-xs"
-                                                        onclick="deleteConfirmation('deleteForm_{{ $article->id }}')">
-                                                        <i class="fas fa-trash me-1"></i>Hapus
-                                                    </button>
-                                                </form>
+                                            <div class="dropdwon">
+                                                <button type="button" class="btn btn-outline-primary dropdown-toggle"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                    Action
+                                                </button>
+                                                <ul class="dropdown-menu"
+                                                    aria-labelledby="actionDropdown{{ $article->id }}">
+                                                    <li>
+                                                        <button type="button" class="dropdown-item text-primary"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#articleDetail{{ $article->id }}">
+                                                            <i class="fas fa-eye me-2"></i>Detail</button>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item text-warning"
+                                                            href="{{ route('article_edit', $article->id) }}"
+                                                            role="button"><i class="fas fa-edit me-2"></i>Edit</a>
+                                                    </li>
+                                                    <li>
+                                                        <form
+                                                            action="{{ route('article_publish', ['id' => $article->id]) }}"
+                                                            id="publishForm_{{ $article->id }}" method="POST">
+                                                            @csrf
+                                                            @method('PATCH')
+                                                            <button type="submit" class="dropdown-item text-info">
+                                                                @if (is_null($article->publish))
+                                                                    <i class="fas fa-check me-2"></i>Publish
+                                                                @else
+                                                                    <i class="fas fa-times me-2"></i>UnPublish
+                                                                @endif
+                                                            </button>
+                                                        </form>
+                                                    </li>
+                                                    @if (auth()->user()->hasRole(['admin', 'editor']))
+                                                        <li>
+                                                            <form
+                                                                action="{{ route('article_recommended', ['id' => $article->id]) }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                @method('PATCH')
+                                                                <button type="submit" class="dropdown-item text-secondary">
+                                                                    @if (!$article->recommended)
+                                                                        <i class="fas fa-check me-2"></i>Rekomendasikan
+                                                                    @else
+                                                                        <i class="fas fa-times me-2"></i>UnRekomendasi
+                                                                    @endif
+                                                                </button>
+                                                            </form>
+                                                        </li>
+                                                    @endif
+                                                    <li>
+                                                        <form id="deleteForm_{{ $article->id }}"
+                                                            action="{{ route('article_destroy', ['id' => $article->id]) }}"
+                                                            method="POST">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="button" class="dropdown-item text-danger"
+                                                                onclick="deleteConfirmation('deleteForm_{{ $article->id }}')">
+                                                                <i class="fas fa-trash me-2"></i>Hapus
+                                                            </button>
+                                                        </form>
+                                                    </li>
+                                                </ul>
                                             </div>
                                         </td>
                                     </tr>
@@ -93,31 +147,42 @@
                             <h6>Judul</h6>
                             <p>{{ $article->title }}</p>
                         </div>
+                        <hr class="bg-primary">
                         <div class="mb-2">
                             <h6>Slug</h6>
                             <p>{{ $article->slug }}</p>
                         </div>
+                        <hr class="bg-primary">
                         <div class="mb-2">
                             <h6>Kategori</h6>
                             <p>{{ $article->category->name }}</p>
                         </div>
+                        <hr class="bg-primary">
                         <div class="mb-2">
                             <h6>Deskripsi</h6>
                             <p>{!! $article->description !!}</p>
                         </div>
+                        <hr class="bg-primary">
                         <div class="mb-2">
                             <h6>Tag</h6>
                             @foreach ($article->tags as $tag)
                                 <p class="badge bg-primary">{{ $tag->name }}</p>
                             @endforeach
                         </div>
+                        <hr class="bg-primary">
+                        <div class="mb-2">
+                            <h6>Penulis</h6>
+                            <p>{{ $article->user->name }}</p>
+                        </div>
+                        <hr class="bg-primary">
                         <div class="mb-2">
                             <h6>Publish</h6>
                             <p>
                                 @if (is_null($article->publish))
                                     <span>Belum Dipublikasikan</span>
                                 @else
-                                    <span>Dipublikasikan pada {{ $article->publish }}</span>
+                                    <span>Dipublikasikan pada
+                                        {{ \Carbon\Carbon::parse($article->publish)->format('d F Y H:i:s') }}</span>
                                 @endif
                             </p>
                         </div>
@@ -141,6 +206,11 @@
             max-width: 100%;
             height: auto;
             width: 500px;
+        }
+
+        figure img {
+            width: 100%;
+            height: auto;
         }
     </style>
 @endsection

@@ -151,7 +151,6 @@ class ArticleController extends Controller
             'description' => $request->input('description'),
             'category_id' => $request->input('category_id'),
             'image' => isset($image_name) ? $image_name : $article->image,
-            'publish' => $request->has('publish') ? now() : null,
         ]);
 
         // Add Update tags
@@ -184,5 +183,77 @@ class ArticleController extends Controller
 
         Alert::success('success', 'Artikel Berhasil di Hapus');
         return redirect()->route('article_index');
+    }
+
+    public function publish($id)
+    {
+        $article = Article::findOrFail($id);
+
+        if ($article->publish) {
+            $article->publish = null;
+            $message = 'Artikel berhasil di-unpublish.';
+        } else {
+            $article->publish = now();
+            $message = 'Artikel berhasil dipublish.';
+        }
+
+        $article->save();
+
+        Alert::success('success', $message);
+        return redirect()->back();
+    }
+
+    public function uploadImage(Request $request)
+    {
+        try {
+            // Debug: cek apakah request memiliki file
+            if (!$request->hasFile('upload')) {
+                return response()->json([
+                    'uploaded' => false,
+                    'error' => [
+                        'message' => 'No file was uploaded.',
+                    ],
+                ], 400);
+            }
+
+            $file = $request->file('upload');
+
+            // Debug: cek detail file
+            // \Log::info('File uploaded: ' . $file->getClientOriginalName());
+
+            // Validasi gambar
+            $validated = $request->validate([
+                'upload' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
+            ]);
+
+            // Simpan gambar
+            $fileName = date('ymdHis') . '_' . preg_replace('/[^a-zA-Z0-9\-_\.]/', '_', $file->getClientOriginalName());
+            $path = $file->storeAs('image-ckeditor', $fileName, 'public');
+
+            return response()->json([
+                'uploaded' => true,
+                'url' => asset('storage/' . $path),
+            ]);
+        } catch (\Exception $e) {
+            // Debug: log error
+            // \Log::error('Upload failed: ' . $e->getMessage());
+            return response()->json([
+                'uploaded' => false,
+                'error' => [
+                    'message' => 'An error occurred during upload: ' . $e->getMessage(),
+                ],
+            ], 500);
+        }
+    }
+
+    public function recommended($id)
+    {
+        $article = Article::findOrFail($id);
+        // Status Recommended Boolean
+        $article->recommended = !$article->recommended;
+        $article->save();
+
+        Alert::success('success', 'Artikel berhasil direkomendasikan.');
+        return redirect()->back();
     }
 }

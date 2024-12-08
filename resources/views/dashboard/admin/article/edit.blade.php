@@ -31,7 +31,7 @@
                         <div class="mb-3">
                             <label for="slug" class="form-label">Slug</label>
                             <input type="text" class="form-control" id="slug" name="slug"
-                                value="{{ $article->slug }}" selected disabled>
+                                value="{{ old('slug', $article->slug) }}" disabled>
                         </div>
 
                         <div class="mb-3">
@@ -43,10 +43,10 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="category" class="form-label">Category</label>
+                            <label for="category" class="form-label">Kategori</label>
                             <select class="form-select" id="category" name="category_id"
                                 aria-label="Default select example">
-                                <option selected disabled>Pilih Category</option>
+                                <option selected disabled>Pilih Kategori</option>
                                 @foreach ($categories as $category)
                                     <option value="{{ $category->id }}"
                                         {{ $category->id == $article->category_id ? 'selected' : '' }}>
@@ -98,54 +98,15 @@
 @endsection
 
 @section('addJs')
-    <!-- CkEditor -->
-    <script src="https://cdn.ckeditor.com/ckeditor5/40.2.0/classic/ckeditor.js"></script>
-    <!-- Select2 -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script>
         ClassicEditor
-            .create(document.querySelector('#description'))
-            .then(editor => {
-                editor.editing.view.change(writer => {
-                    const toolbarElement = editor.ui.view.toolbar.element;
-                    const editorElement = editor.ui.view.editable.element;
-
-                    writer.setStyle('height', 'auto', editor.editing.view.document.getRoot());
-                    writer.setStyle('border-bottom-left-radius', '10px', editor.editing.view.document
-                        .getRoot());
-                    writer.setStyle('border-bottom-right-radius', '10px', editor.editing.view.document
-                        .getRoot());
-
-                    // Set border radius dengan nilai berbeda untuk setiap ujung pada toolbar
-                    toolbarElement.style.borderTopLeftRadius = '10px';
-                    toolbarElement.style.borderTopRightRadius = '10px';
-                    toolbarElement.style.borderBottomLeftRadius = '0';
-                    toolbarElement.style.borderBottomRightRadius = '0';
-
-                    // editor.ui.focusTracker.on('change:isFocused', (eventInfo, name, value) => {
-                    //     if (value) {
-                    //         editorElement.style.height = 'auto';
-                    //         editorElement.style.borderBottomLeftRadius = '10px';
-                    //         editorElement.style.borderBottomRightRadius = '10px';
-                    //     } else {
-                    //         editorElement.style.height = 'auto';
-                    //         editorElement.style.borderBottomRightRadius = '10px';
-                    //         editorElement.style.borderBottomLeftRadius = '10px';
-                    //     }
-                    // });
-                })
+            .create(document.querySelector('#description'), {
+                ckfinder: {
+                    uploadUrl: '{{ route('ckeditor.upload') }}?_token={{ csrf_token() }}',
+                },
             })
             .catch(error => {
                 console.error(error);
             });
-
-        $(document).ready(function() {
-            $('#tags').select2({
-                tags: true,
-                tokenSeparators: [',', ' '],
-                placeholder: "Select or type new tags",
-            });
-        });
     </script>
 @endsection

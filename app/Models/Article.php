@@ -22,6 +22,7 @@ class Article extends Model
         'user_id',
         'image',
         'publish',
+        'recommended',
         'views',
     ];
 
@@ -43,5 +44,11 @@ class Article extends Model
                 'onUpdate' => true,
             ]
         ];
+    }
+
+    // Local Scope: Filter hanya artikel yang sudah dipublikasikan
+    public function scopePublished($query)
+    {
+        return $query->whereNotNull('publish');
     }
 }
