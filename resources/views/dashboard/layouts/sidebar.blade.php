@@ -4,7 +4,7 @@
         <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
             aria-hidden="true" id="iconSidenav"></i>
         <a class="navbar-brand m-0">
-            <img src="" class="navbar-brand-img h-100" alt="" />
+            <img src="{{ asset('assets/logo.png') }}" class="navbar-brand-img h-100" alt="Logo TechUp" />
             <span class="ms-1 font-weight-bold">Dashboard</span>
         </a>
 
@@ -24,30 +24,46 @@
                 </li>
             </ul>
 
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->is('user*') ? 'active' : '' }}" href="{{ route('user_index') }}">
-                        <div
-                            class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                            <i class="fa fa-user text-primary text-sm opacity-10"></i>
-                        </div>
-                        <span class="nav-link-text ms-1">User</span>
-                    </a>
-                </li>
-            </ul>
+            @if (auth()->check() && auth()->user()->hasRole('admin'))
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->is('user*') ? 'active' : '' }}"
+                            href="{{ route('user_index') }}">
+                            <div
+                                class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                                <i class="fa fa-user text-primary text-sm opacity-10"></i>
+                            </div>
+                            <span class="nav-link-text ms-1">User</span>
+                        </a>
+                    </li>
+                </ul>
 
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->is('category*') ? 'active' : '' }}"
-                        href="{{ route('category_index') }}">
-                        <div
-                            class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                            <i class="fa fa-list text-primary text-sm opacity-10"></i>
-                        </div>
-                        <span class="nav-link-text ms-1">Category</span>
-                    </a>
-                </li>
-            </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->is('role*') ? 'active' : '' }}"
+                            href="{{ route('role_index') }}">
+                            <div
+                                class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                                <i class="fab fa-keycdn text-primary text-sm opacity-10"></i>
+                            </div>
+                            <span class="nav-link-text ms-1">Role</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->is('category*') ? 'active' : '' }}"
+                            href="{{ route('category_index') }}">
+                            <div
+                                class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                                <i class="fa fa-list text-primary text-sm opacity-10"></i>
+                            </div>
+                            <span class="nav-link-text ms-1">Category</span>
+                        </a>
+                    </li>
+                </ul>
+            @endif
 
             <ul class="navbar-nav">
                 <li class="nav-item">
@@ -61,55 +77,6 @@
                     </a>
                 </li>
             </ul>
-
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->is('setting') ? 'active' : '' }}" data-bs-toggle="collapse"
-                        href="#collapseSetting" role="button" aria-expanded="false" aria-controls="collapseSetting">
-                        <div
-                            class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                            <i class="fas fa-cog text-primary text-sm opacity-10"></i>
-                        </div>
-                        <span class="nav-link-text ms-1">Setting</span>
-                    </a>
-                    <div class="collapse" id="collapseSetting">
-                        <ul class="nav ms-4 ps-3">
-                            <li class="nav-item">
-                                <a class="nav-link {{ request()->is('setting/profile') ? 'active' : '' }}"
-                                    href="">
-                                    <span class="nav-link-text">Profile</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link {{ request()->is('setting/privacy') ? 'active' : '' }}"
-                                    href="">
-                                    <span class="nav-link-text">Privacy Setting</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link {{ request()->is('setting/security') ? 'active' : '' }}"
-                                    href="">
-                                    <span class="nav-link-text">Security Setting</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-            </ul>
-
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->is('role*') ? 'active' : '' }}" href="{{ route('role_index') }}">
-                        <div
-                            class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                            <i class="fab fa-keycdn text-primary text-sm opacity-10"></i>
-                        </div>
-                        <span class="nav-link-text ms-1">Role</span>
-                    </a>
-                </li>
-            </ul>
-
-
 
         </div>
     </div>

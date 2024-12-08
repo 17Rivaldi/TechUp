@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\Category;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
 class DashboardController extends Controller
 {
@@ -14,55 +16,23 @@ class DashboardController extends Controller
     public function index()
     {
         $totalUser = User::count();
-        $totalArticle = Article::count();
-        return view('dashboard.admin.home', compact('totalUser', 'totalArticle'));
-    }
+        $totalCategory = Category::count();
+        $totalRole = Role::count();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        if (auth()->user()->hasRole('admin')) {
+            $totalArticle = Article::count();
+            $totalArticlePerMonth = Article::whereMonth('created_at', now()->month)->count();
+            $totalArticlePerDay = Article::whereDate('created_at', today())->count();
+        } else {
+            $totalArticle = Article::where('user_id', auth()->id())->count();
+            $totalArticlePerMonth = Article::where('user_id', auth()->id())
+                ->whereMonth('created_at', now()->month)
+                ->count();
+            $totalArticlePerDay = Article::where('user_id', auth()->id())
+                ->whereDate('created_at', today())
+                ->count();
+        }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return view('dashboard.admin.home', compact('totalUser', 'totalArticle', 'totalCategory', 'totalRole', 'totalArticlePerMonth', 'totalArticlePerDay'));
     }
 }

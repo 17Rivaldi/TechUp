@@ -27,18 +27,28 @@
                 @else
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle text-white font-weight-bold px-0"
-                            href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false">
-                            <i class="fa fa-user me-sm-1"></i>
-                            <span class="d-sm-inline d-none">
-                                {{ auth()->user()->name }}
-                            </span>
+                            role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            @if (auth()->user()->profile_image)
+                                <img src="{{ asset('storage/image-profile/' . auth()->user()->profile_image) }}"
+                                    alt="Foto Profil" class="rounded-circle"
+                                    style="width: 35px; height: 35px; object-fit: cover;">
+                            @else
+                                <img src="https://t4.ftcdn.net/jpg/03/31/69/91/360_F_331699188_lRpvqxO5QRtwOM05gR50ImaaJgBx68vi.jpg"
+                                    alt="Foto Profil" class="rounded-circle"
+                                    style="width: 35px; height: 35px; object-fit: cover;" data-bs-toogle="tooltip"
+                                    data-bs-placement="top" title="{{ auth()->user()->email }}">
+                            @endif
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <a href="{{ route('profile') }}" class="dropdown-item">
+                            <a href="{{ route('profile') }}" class="dropdown-item text-primary">
                                 <i class="fas fa-user me-2"></i>
                                 Profile
+                            </a>
+
+                            <a href="{{ route('home') }}" class="dropdown-item">
+                                <i class="fa-solid fa-pager me-2"></i>
+                                Web Page
                             </a>
 
                             <a class="dropdown-item text-danger" href="{{ route('logout') }}"
