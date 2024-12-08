@@ -6,16 +6,16 @@
 @endphp
 
 @section('content')
-    <section class="h-100 gradient-custom-2">
+    <section class="vh-100 gradient-custom-2">
         <div class="container py-5 h-100">
             <div class="row d-flex justify-content-center">
                 <div class="col col-lg-9 col-xl-8">
                     <div class="card">
                         <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
                             <div class="ms-4 mt-4 d-flex flex-column" style="width: 150px;">
-                                <a href="{{ auth()->user()->hasRole('admin') ? route('dashboard') : route('home') }}"
-                                    class="text-decoration-none text-light fw-bold">
-                                    <i class="fas fa-chevron-left me-1"></i>Back
+                                <a href="{{ auth()->user()->hasRole('admin|writer|editor') ? route('dashboard') : route('home') }}"
+                                    class="text-decoration-none text-light fw-bold mb-4">
+                                    <i class="fas fa-chevron-left me-1"></i>Kembali
                                 </a>
                                 @if ($users->profile_image)
                                     <img src="{{ asset('storage/image-profile/' . $users->profile_image) }}"
@@ -26,44 +26,100 @@
                                         alt="Default Image Profile" class="img-fluid img-thumbnail mt-4 mb-2"
                                         style="width: 150px; z-index: 1">
                                 @endif
-                                <button type="button" class="btn btn-outline-primary mt-2" data-bs-toggle="modal"
-                                    data-bs-target="#profileModal" style="z-index: 1;">
-                                    Edit Profile
+
+                                <!-- Dropdown -->
+                                <button class="btn btn-outline-secondary dropdown-toggle" type="button"
+                                    id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"
+                                    style="z-index: 1;">
+                                    <i class="fas fa-cog me-2"></i>Setting
                                 </button>
-                                <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal"
-                                    data-bs-target="#passwordModal" style="z-index: 1;">
-                                    <i class="fas fa-cog me-2"></i>
-                                </button>
+                                <div class="dropdown dropend">
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <li>
+                                            <button type="button" class="dropdown-item" data-bs-toggle="modal"
+                                                data-bs-target="#profileModal">
+                                                <i class="fa-solid fa-user me-2"></i>Edit Profile
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button type="button" class="dropdown-item" data-bs-toggle="modal"
+                                                data-bs-target="#passwordModal">
+                                                <i class="fa-solid fa-key me-2"></i>Ubah Password
+                                            </button>
+                                        </li>
+                                        <li>
+                                            @if (!auth()->user()->hasRole('admin|editor|writer'))
+                                                <form action="{{ route('request_writer') }}" method="POST">
+                                                    @csrf
+                                                    <button type="submit" class="dropdown-item">
+                                                        <i class="fa-solid fa-pen me-2"></i>Ajukan Menjadi Writer
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        </li>
+                                        <li>
+                                            @if (!auth()->user()->hasVerifiedEmail())
+                                                <form action="{{ route('verification.resend') }}" method="POST">
+                                                    @csrf
+                                                    <button type="submit" class="dropdown-item">
+                                                        <i class="fa-solid fa-envelope me-2"></i>
+                                                        Kirim Ulang Verifikasi Email
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        </li>
+                                    </ul>
+                                </div>
+
                             </div>
                             <div class="ms-3" style="margin-top: 130px;">
                                 <h5>{{ $users->name }}</h5>
                                 <p>{{ $users->email }}</p>
+                            </div>
+                            <div class="ms-auto d-flex align-items-center me-3" style="margin-top: 150px;">
+                                @if (!auth()->user()->hasVerifiedEmail())
+                                    <i class="fa-solid fa-circle-xmark text-warning me-2"></i>
+                                    Belum Terverifikasi
+                                @else
+                                    <i class="fa-solid fa-circle-check text-primary me-2"></i>
+                                    Terverifikasi
+                                @endif
                             </div>
                         </div>
                         <div class="p-4 text-black bg-body-tertiary">
                             <div class="d-flex justify-content-end text-center py-1 text-body">
                                 <div>
                                     <p class="mb-1 h5">{{ $totalArticle }}</p>
-                                    <p class="small text-muted mb-0">Article</p>
+                                    <p class="small text-muted mb-0">Artikel</p>
                                 </div>
                                 <div class="px-3">
-                                    <p class="mb-1 h5">{{ $totalViews }}</p>
-                                    <p class="small text-muted mb-0">Article Viewed</p>
+                                    <p class="mb-1 h5">{{ $totalViews }}x</p>
+                                    <p class="small text-muted mb-0">Artikel Dilihat</p>
                                 </div>
-
+                                <div>
+                                    <p class="mb-1 h5">{{ $totalPublish }}</p>
+                                    <p class="small text-muted mb-0">Artikel Dipublikasi</p>
+                                </div>
                             </div>
                         </div>
-                        <div class="card-body p-4 text-black">
-                            <div class="mb-5  text-body">
-                                <p class="lead fw-normal mb-1">About</p>
+                        <div class="card-body text-black">
+                            <div class="text-body">
+                                @if (session('resent'))
+                                    <div class="alert alert-success" role="alert">
+                                        <i class="fa-solid fa-envelope-circle-check"></i>
+                                        {{ __('Tautan verifikasi baru telah dikirim ke alamat email Anda.') }}
+                                    </div>
+                                @endif
+                                <p class="lead fw-normal mb-4">Tentang</p>
                                 <div class="p-4 bg-body-tertiary">
                                     <p class="font-italic mb-1">Nomor Telephone : {{ $users->phone_number }}</p>
-                                    <p class="font-italic mb-1">Tanggal Lahir : {{ $users->birthdate }}</p>
-                                    <p class="font-italic mb-0">Jenis Kelamin : {{ $users->gender }}</p>
+                                    <p class="font-italic mb-1">Tanggal Lahir :
+                                        {{ \Carbon\Carbon::parse($users->birthdate)->locale('id')->isoFormat('D MMMM YYYY') }}
+                                    </p>
+                                    <p class="font-italic mb-0">Jenis Kelamin :
+                                        {{ $users->gender == 'male' ? 'Laki-laki' : 'Perempuan' }}</p>
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
                 </div>
@@ -79,7 +135,7 @@
                 @method('PUT')
                 <div class="modal-content">
                     <div class="modal-body">
-                        <h4 class="mb-3 text-center fw-semibold">Edit Profile</h4>
+                        <h4 class="mb-3 text-center fw-semibold">Edit Profil</h4>
                         <div class="mb-3">
                             <label for="name" class="form-label">Nama</label>
                             <input type="text" class="form-control shadow" id="name" name="name"
@@ -90,7 +146,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="email" class="form-label">Email address</label>
+                            <label for="email" class="form-label">Email</label>
                             <input type="email" class="form-control shadow" id="email" name="email"
                                 value="{{ $users->email }}">
                             @error('email')
@@ -99,7 +155,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="phone_number" class="form-label">Phone Number</label>
+                            <label for="phone_number" class="form-label">Nomor Telepon</label>
                             <input type="number" class="form-control shadow" id="phone_number" name="phone_number"
                                 value="{{ old('phone_number', $users->phone_number) }}">
                             @error('phone_number')
@@ -108,7 +164,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="birthdate" class="form-label">Birthdate</label>
+                            <label for="birthdate" class="form-label">Tanggal Lahir</label>
                             <input type="date" class="form-control shadow" id="birthdate" name="birthdate"
                                 value="{{ old('birthdate', $users->birthdate) }}">
                             @error('birthdate')
@@ -117,13 +173,13 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="gender" class="form-label">Gender</label>
+                            <label for="gender" class="form-label">Jenis Kelamin</label>
                             <select class="form-select shadow" id="gender" name="gender">
-                                <option selected disabled>Choose Gender</option>
+                                <option selected disabled>Pilih Jenis Kelamin</option>
                                 <option value="male" {{ old('gender', $users->gender) == 'male' ? 'selected' : '' }}>
-                                    Male</option>
+                                    Laki-laki</option>
                                 <option value="female" {{ old('gender', $users->gender) == 'female' ? 'selected' : '' }}>
-                                    Female</option>
+                                    Perempuan</option>
                             </select>
                             @error('gender')
                                 <small class="text-danger">{{ $message }}</small>
@@ -131,15 +187,15 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="profile_image" class="form-label">Profile Image</label>
+                            <label for="profile_image" class="form-label">Foto Profil</label>
                             <input type="file" class="form-control shadow" id="profile_image" name="profile_image">
                             @error('profile_image')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
 
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save Profile</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
                     </div>
                 </div>
             </form>
@@ -154,11 +210,11 @@
                 @method('PUT')
                 <div class="modal-content">
                     <div class="modal-body">
-                        <h4 class="mb-3 text-center fw-semibold">Change Password</h4>
+                        <h4 class="mb-3 text-center fw-semibold">Ubah Password</h4>
 
                         <!-- Current Password -->
                         <div class="mb-3">
-                            <label for="current_password" class="form-label">Current Password</label>
+                            <label for="current_password" class="form-label">Password Saat Ini</label>
                             <div class="input-group">
                                 <input type="password" class="form-control shadow shadow-end-none" id="current_password"
                                     name="current_password" required>
@@ -174,7 +230,7 @@
 
                         <!-- New Password -->
                         <div class="mb-3">
-                            <label for="password" class="form-label">New Password</label>
+                            <label for="password" class="form-label">Password Baru</label>
                             <div class="input-group">
                                 <input type="password" class="form-control shadow shadow-end-none" id="password"
                                     name="password">
@@ -189,7 +245,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="password_confirmation" class="form-label">Confirm New Password</label>
+                            <label for="password_confirmation" class="form-label">Konfirmasi Password Baru</label>
                             <div class="input-group">
                                 <input type="password" class="form-control shadow shadow-end-none"
                                     id="password_confirmation" name="password_confirmation">
@@ -203,31 +259,28 @@
                             @enderror
                         </div>
 
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save Password</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-
-    @if (session('alert.config'))
-        <pre>{{ print_r(session('alert.config'), true) }}</pre>
-    @endif
 @endsection
 
 
 @section('addCss')
     <style>
         .gradient-custom-2 {
-            /* fallback for old browsers */
             background: #fbc2eb;
-
-            /* Chrome 10-25, Safari 5.1-6 */
             background: -webkit-linear-gradient(to right, rgba(251, 194, 235, 1), rgba(166, 193, 238, 1));
-
-            /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
             background: linear-gradient(to right, rgba(251, 194, 235, 1), rgba(166, 193, 238, 1))
+        }
+
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
         }
     </style>
 @endsection

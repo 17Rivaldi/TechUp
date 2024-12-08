@@ -9,9 +9,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
-Route::middleware(['auth', 'role:admin|writer|editor'])->group(function () {
+Route::middleware(['auth', 'verified', 'role:admin|writer|editor'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/user', [UserController::class, 'index'])->name('user_index');
@@ -44,6 +44,9 @@ Route::middleware(['auth', 'role:admin|writer|editor'])->group(function () {
     Route::get('/article/{id}/edit', [ArticleController::class, 'edit'])->name('article_edit');
     Route::put('/article/{id}', [ArticleController::class, 'update'])->name('article_update');
     Route::delete('/article/{id}', [ArticleController::class, 'destroy'])->name('article_destroy');
+    Route::patch('/article/{id}/publish', [ArticleController::class, 'publish'])->name('article_publish');
+    Route::post('/ckeditor/upload', [ArticleController::class, 'uploadImage'])->name('ckeditor.upload');
+    Route::patch('/article/{id}/recommended', [ArticleController::class, 'recommended'])->name('article_recommended');
 });
 
 // Page Profile
@@ -53,6 +56,9 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/change-password/{id}', [ProfileController::class, 'changePassword'])->name('change_password');
 });
 
+// Request Role
+Route::post('/request-writer', [ProfileController::class, 'requestWriter'])->name('request_writer');
+
 // Website
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/terms-conditions', function () {
@@ -60,6 +66,8 @@ Route::get('/terms-conditions', function () {
 })->name('termsConditions');
 Route::get('/terkini', [HomeController::class, 'show'])->name('terkini');
 Route::get('/search', [HomeController::class, 'search'])->name('search');
-Route::get('/{category?}', [HomeController::class, 'show'])->name('show');
+Route::get('/rekomendasi', [HomeController::class, 'showRecommended'])->name('recommended');
+Route::get('/populer', [HomeController::class, 'showPopular'])->name('popular');
+Route::get('/{category:slug?}', [HomeController::class, 'show'])->name('show');
 Route::get('/berita/{slug}', [HomeController::class, 'detail'])->name('detail');
 Route::get('/tag/{tagslug}', [HomeController::class, 'showTag'])->name('showTag');

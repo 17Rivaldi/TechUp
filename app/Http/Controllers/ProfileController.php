@@ -10,6 +10,7 @@ use Intervention\Image\ImageManager;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Drivers\Gd\Driver;
+use Spatie\Permission\Models\Role;
 
 class ProfileController extends Controller
 {
@@ -21,7 +22,8 @@ class ProfileController extends Controller
         $users = User::find(auth()->id());
         $totalArticle = Article::where('user_id', auth()->id())->count();
         $totalViews = Article::where('user_id', auth()->id())->sum('views');
-        return view('dashboard.profile', compact('users', 'totalArticle', 'totalViews'));
+        $totalPublish = Article::where('user_id', auth()->id())->whereNotNull('publish')->count();
+        return view('dashboard.profile', compact('users', 'totalArticle', 'totalViews', 'totalPublish'));
     }
 
     /**
@@ -70,7 +72,7 @@ class ProfileController extends Controller
             'profile_image' => isset($image_name) ? $image_name : $user->profile_image,
         ]);
 
-        Alert::success('success', 'User Berhasil Perbaharui');
+        Alert::success('Selamat', 'Data Berhasil Diperbaharui');
         return redirect()->route('profile');
     }
 
@@ -99,5 +101,40 @@ class ProfileController extends Controller
 
         Alert::success('success', 'Password Berhasil Diubah');
         return redirect()->route('profile');
+    }
+
+    public function requestWriter()
+    {
+        $user = auth()->user();
+
+        // Pastikan email sudah terverifikasi
+        if (!$user->hasVerifiedEmail()) {
+            Alert::error('Gagal', 'Harap verifikasi email Anda terlebih dahulu.');
+            return redirect()->back();
+        }
+
+        // Memastikan user telah melengkapi data diri
+        if (empty($user->phone_number) || empty($user->birthdate) || empty($user->gender)) {
+            dd($user->phone_number, $user->dob, $user->gender);
+
+            Alert::error('Gagal', 'Harap lengkapi data diri Anda terlebih dahulu.');
+            return redirect()->back();
+        }
+
+        // Cek Role apakah user admin atau editor
+        if ($user->hasRole('admin') || $user->hasRole('editor')) {
+            Alert::error('Gagal', 'Anda sudah memiliki role yang lebih tinggi.');
+            return redirect()->back();
+        }
+
+        // Hapus role sebelumnya
+        $user->syncRoles([]);
+
+        // Tambahkan role 'writer' jika belum ada
+        if (!$user->hasRole('writer')) {
+            $user->assignRole('writer');
+            Alert::success('Selamat', 'Anda telah berhasil menjadi writer.');
+            return redirect()->back();
+        }
     }
 }

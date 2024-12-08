@@ -32,14 +32,12 @@ class RoleController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            // 'permissions' => 'required|array'
         ]);
 
         $role = Role::firstOrCreate(
             ['name' => $request->name],
             ['guard_name' => 'web']
         );
-        // $role->syncPermissions($request->permissions);
 
         Alert::success('success', 'Role Berhasil Dibuat');
         return redirect()->route('role_index');
@@ -59,6 +57,13 @@ class RoleController extends Controller
     public function edit(string $id)
     {
         $roles = Role::find($id);
+
+        // Cek apakah role adalah "admin"
+        if ($roles->name === 'admin') {
+            Alert::error('error', 'Role admin tidak bisa diedit.');
+            return redirect()->route('role_index');
+        }
+
         return view('dashboard.admin.role.edit', compact('roles'));
     }
 
@@ -67,7 +72,16 @@ class RoleController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $role = Role::find($id);
+        $role->name = $request->name;
+        $role->save();
+
+        Alert::success('success', 'Role Berhasil Diperbarui');
+        return redirect()->route('role_index');
     }
 
     /**
@@ -77,10 +91,12 @@ class RoleController extends Controller
     {
         $role = Role::findOrFaIl($id);
 
-        if (!$role) {
-            Alert::error('error', 'Category tidak ditemukan.');
-            return redirect()->route('category_index');
+        // Cek apakah role adalah "admin"
+        if ($role->name === 'admin') {
+            Alert::error('error', 'Role admin tidak bisa dihapus.');
+            return redirect()->route('role_index');
         }
+
         $role->delete();
 
         Alert::success('success', 'Data Berhasil di Hapus');
