@@ -1,66 +1,95 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## About TechUp
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+TechUp adalah portal berita berbasis website yang dikembangkan menggunakan framework PHP, Laravel versi 11. Portal ini dirancang untuk menyajikan informasi terkini dalam dunia teknologi.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+-   **Publikasi Artikel**: Artikel yang telah dibuat akan ditampilkan di portal berita setelah dipublikasikan.
+-   **Manajemen Kategori**: Artikel dapat dikelompokkan berdasarkan kategori yang telah ditentukan.
+-   **Manajemen Tag**: Artikel dapat diberikan lebih dari satu tag untuk memudahkan pengelompokan.
+-   **Rekomendasi Editor**: Fitur yang memungkinkan editor untuk menandai artikel sebagai rekomendasi.
+-   **Pencarian Artikel**: Pengguna dapat mencari artikel menggunakan kata kunci tertentu melalui fitur pencarian.
+-   **Statistik Artikel Populer**: Menampilkan artikel berdasarkan jumlah pembaca terbanyak.
+-   **Verifikasi Email**: Pengguna yang sudah berhasil melakukan registrasi diwajibkan untuk memverifikasi alamat email mereka.
+-   **Ajukan Sebagai Penulis**: pengguna yang sudah terdaftar dapat mengajukan diri untuk menjadi penulis artikel melalui halaman profil.
+-   **Manajemen User**: Admin dapat mengelola pengguna yang telah terdaftar untuk mengubahnya menjadi penulis atau editor.
+-   **Manajemen Role**: Admin dapat membuat, mengedit, dan menghapus role sesuai dengan kebutuhan.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Installation
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Download/Clone this project
 
-## Learning Laravel
+```bash
+ git clone https://github.com/17Rivaldi/TechUp.git
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Open directory
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+```bash
+ cd TechUp
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Run this command in terminal
 
-## Laravel Sponsors
+```bash
+ composer install
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+ cp .env.example .env
+```
 
-### Premium Partners
+```bash
+ php artisan key:generate
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+```bash
+ php artisan migrate:fresh
+```
 
-## Contributing
+```bash
+ php artisan db:seed
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+ php artisan storage:link
+```
 
-## Code of Conduct
+## Setting file .env
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+ APP_NAME=TechUp
+ APP_TIMEZONE=Asia/Jakarta
 
-## Security Vulnerabilities
+ APP_LOCALE=id
+ APP_FALLBACK_LOCALE=id
+ APP_FAKER_LOCALE=id_ID
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+ DB_CONNECTION=mysql
+ DB_DATABASE=techup
+```
 
-## License
+Untuk melakukan uji coba pengiriman email menggunakan Mailtrap:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+ MAIL_MAILER=smtp
+ MAIL_HOST=sandbox.smtp.mailtrap.io
+ MAIL_PORT=2525
+ MAIL_USERNAME=your_mailtrap_username # Username dapat ditemukan di dashboard Mailtrap
+ MAIL_PASSWORD=your_mailtrap_password # Password juga dapat ditemukan di dashboard Mailtrap
+ MAIL_ENCRYPTION=tls
+ MAIL_FROM_ADDRESS=your_email@example.com
+ MAIL_FROM_NAME="${APP_NAME}"
+```
+
+## Running a website
+
+```bash
+ php artisan serve
+```
+
+## Login With Admin
+
+Account = `admin@role.id`
+
+Password = `admin123`
