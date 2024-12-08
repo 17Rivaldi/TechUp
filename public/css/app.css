@@ -5,11 +5,14 @@
     overflow: auto;
     height: calc(100vh - 150px);
 }
-/* 
-.nav-link:hover {
-    background-color: #f0f0f0;
-    color: #000;
-} */
+
+.img-usr:hover {
+    background-color: black;
+}
+
+.dropdown-toggle::after {
+    display: none;
+}
 
 /* Style for dataTables */
 .pagination .page-item.active .page-link {
